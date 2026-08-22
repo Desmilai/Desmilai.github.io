@@ -9,6 +9,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+    /* Сброс стилей Jekyll / GitHub Pages */
+    .markdown-body, .container-lg, .my-5, .px-3 {
+      padding: 0 !important;
+      margin: 0 !important;
+      max-width: 100vw !important;
+      width: 100vw !important;
+      background: transparent !important;
+      color: inherit !important;
+    }
+    .markdown-body > h1:first-child,
+    .markdown-body > p:first-of-type,
+    .anchorjs-link {
+      display: none !important;
+    }
+
     :root {
       --bg-base: #02050e;
       --glass-bg: rgba(15, 23, 42, 0.45);
@@ -28,14 +43,17 @@
       --text-muted: #94a3b8;
     }
 
+    /* Полный запрет выделения текста */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
       -webkit-user-select: none !important;
+      -moz-user-select: none !important;
+      -ms-user-select: none !important;
       user-select: none !important;
       -webkit-touch-callout: none !important;
     }
@@ -66,15 +84,17 @@
       position: relative;
     }
 
+    /* Градиентный меш-фон для главного меню */
     .gradient-mesh-bg {
       position: fixed;
       inset: 0;
-      background: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.35) 0px, transparent 50%),
-                  radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.3) 0px, transparent 50%),
-                  radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.28) 0px, transparent 50%),
-                  radial-gradient(at 0% 100%, rgba(6, 182, 212, 0.3) 0px, transparent 50%);
+      background: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.45) 0px, transparent 50%),
+                  radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.4) 0px, transparent 50%),
+                  radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.35) 0px, transparent 50%),
+                  radial-gradient(at 0% 100%, rgba(6, 182, 212, 0.38) 0px, transparent 50%);
       z-index: -3;
       pointer-events: none;
+      transition: opacity 0.5s ease;
     }
 
     .liquid-blob {
@@ -96,6 +116,7 @@
       100% { transform: translate(-35px, 55px) scale(0.92); }
     }
 
+    /* Динамический холст для комнаты: захватывает цвета видео и размывает по всему сайту */
     #ambientCanvas {
       position: fixed;
       top: -15%;
@@ -103,13 +124,13 @@
       width: 130vw;
       height: 130vh;
       z-index: -1;
-      filter: blur(120px) saturate(260%) brightness(0.4);
+      filter: blur(85px) saturate(360%) brightness(0.95);
       opacity: 0;
       pointer-events: none;
       transform: translate3d(0, 0, 0);
-      transition: opacity 0.6s ease-in-out;
+      transition: opacity 0.5s ease-in-out;
     }
-    #ambientCanvas.active { opacity: 0.85; }
+    #ambientCanvas.active { opacity: 1; }
 
     .app-container {
       width: 100%;
@@ -124,6 +145,7 @@
       min-height: 0;
     }
 
+    /* Единый стиль полупрозрачного стекла для ВСЕХ панелей, окон и карточек */
     .liquid-card {
       background: var(--glass-bg) !important;
       backdrop-filter: blur(28px) saturate(200%) !important;
@@ -248,6 +270,7 @@
     .view-section { display: none; flex-direction: column; gap: 6px; flex: 1; min-height: 0; }
     .view-section.active { display: flex; }
 
+    /* Лобби */
     .lobby-grid {
       display: grid;
       grid-template-columns: 1fr 290px;
@@ -283,7 +306,7 @@
     .room-item-liquid {
       display: flex;
       flex-direction: row;
-      background: rgba(255, 255, 255, 0.04);
+      background: var(--glass-bg);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--glass-border);
@@ -297,7 +320,7 @@
       max-height: 76px;
     }
     .room-item-liquid:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.12);
       border-color: var(--glass-border-active);
       transform: translateY(-1px);
     }
@@ -433,7 +456,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(255, 255, 255, 0.04);
+      background: var(--glass-bg);
       backdrop-filter: blur(12px);
       padding: 7px 10px;
       border-radius: 12px;
@@ -441,6 +464,7 @@
       border: 1px solid var(--glass-border);
     }
 
+    /* Аватарка */
     .friend-avatar-wrap, .avatar-box {
       position: relative;
       width: 36px;
@@ -492,6 +516,7 @@
     .status-dot-on-avatar.online { background: var(--success); box-shadow: 0 0 6px var(--success); }
     .status-dot-on-avatar.offline { background: var(--offline); }
 
+    /* Комната */
     .room-workspace {
       display: flex;
       flex-direction: column;
@@ -566,7 +591,6 @@
       max-height: 100%;
       object-fit: contain;
       border-radius: 18px;
-      border: none;
     }
 
     .stream-loader-overlay {
@@ -595,6 +619,7 @@
     }
     @keyframes spinStream { to { transform: rotate(360deg); } }
 
+    /* Чат */
     .chat-container {
       flex: 1;
       width: 100%;
@@ -733,6 +758,7 @@
       text-overflow: ellipsis;
     }
 
+    /* Анимации реакций */
     .emoji-anim-heart { display: inline-block; animation: heartbeat 0.8s infinite ease-in-out; }
     .emoji-anim-fire { display: inline-block; animation: flamePulse 1s infinite alternate ease-in-out; }
     .emoji-anim-party { display: inline-block; animation: confettiBurst 0.6s ease-out; }
@@ -952,6 +978,7 @@
       gap: 6px;
     }
 
+    /* Тосты */
     .toast-container {
       position: fixed;
       top: 16px;
@@ -976,6 +1003,7 @@
       max-width: 300px;
     }
 
+    /* Иерархия Z-INDEX модалок */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -1110,6 +1138,11 @@
     .access-pill-btn.opt-unlisted { background: rgba(244, 63, 94, 0.15); color: #fb7185; border-color: rgba(244, 63, 94, 0.4); }
     .access-pill-btn.opt-friends { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.4); }
 
+    .access-pill-btn.opt-public.active { box-shadow: 0 0 8px rgba(16,185,129,0.6); border-color: #10b981; }
+    .access-pill-btn.opt-unlisted.active { box-shadow: 0 0 8px rgba(244,63,94,0.6); border-color: #f43f5e; }
+    .access-pill-btn.opt-friends.active { box-shadow: 0 0 8px rgba(245,158,11,0.6); border-color: #f59e0b; }
+
+    /* 3 ИКОНКИ УЧАСТНИКА */
     .user-actions-row {
       display: flex;
       align-items: center;
@@ -1139,30 +1172,21 @@
 </head>
 <body>
 
-<script>
-  (function() {
-    const cleanGitHubWrapper = () => {
-      document.querySelectorAll('.markdown-body, .container-lg, .my-5, .px-3').forEach(el => {
-        el.removeAttribute('class');
-        el.style.cssText = 'padding: 0 !important; margin: 0 !important; max-width: none !important; width: 100% !important; background: transparent !important; color: inherit !important;';
-      });
-    };
-    if (document.body) cleanGitHubWrapper();
-    window.addEventListener('DOMContentLoaded', cleanGitHubWrapper);
-  })();
-</script>
-
 <div class="gradient-mesh-bg"></div>
 <div class="liquid-blob blob-1"></div>
 <div class="liquid-blob blob-2"></div>
 <div class="liquid-blob blob-3"></div>
 <canvas id="ambientCanvas" width="64" height="36"></canvas>
 
+<!-- Тосты -->
 <div class="toast-container" id="toastContainer"></div>
+
+<!-- Аудио-контейнер для голосовой связи -->
 <div id="remoteAudiosContainer" style="display:none;"></div>
 
 <div class="app-container">
   
+  <!-- Главная шапка -->
   <header class="liquid-card">
     <div class="header-left">
       <button class="btn-icon" onclick="openNotifications()" title="Уведомления">
@@ -1175,10 +1199,12 @@
         <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
       </button>
 
+      <!-- Шестеренка настроек -->
       <button class="btn-icon" onclick="openSettingsModal()" title="Настройки">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
       </button>
 
+      <!-- Настройки комнаты для создателя -->
       <button class="btn-icon" id="btnRoomSettings" onclick="openRoomSettings()" style="display: none;" title="Настройки комнаты">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
       </button>
@@ -1203,6 +1229,7 @@
     </div>
   </header>
 
+  <!-- 1. Лобби -->
   <div id="lobbyView" class="view-section active">
     <div class="lobby-grid">
       <div class="liquid-card lobby-panel">
@@ -1223,9 +1250,11 @@
     </div>
   </div>
 
+  <!-- 2. Комната -->
   <div id="roomView" class="view-section">
     <div class="room-workspace">
       
+      <!-- Медиа-панель -->
       <div class="room-left-pane">
         <div class="room-sub-bar liquid-card">
           <div style="display: flex; align-items: center; gap: 6px;">
@@ -1234,38 +1263,37 @@
           </div>
 
           <div style="display: flex; gap: 6px; align-items: center; flex-shrink: 0;">
-            <!-- Кнопка прямого захвата VK Video через вкладку -->
-            <button class="btn btn-secondary" id="btnChooseVk" onclick="openVkVideoHelperModal()" style="display: none; padding: 4px 8px; font-size: 0.75rem;" title="Запустить ВК Видео">
-              📼 ВК Видео (Трансляция)
-            </button>
-
-            <button class="btn-icon" id="btnStreamToggle" onclick="toggleScreenBroadcast()" style="display: none;" title="Трансляция экрана">
+            <!-- Кнопка стрима -->
+            <button class="btn-icon" id="btnStreamToggle" onclick="toggleScreenBroadcast()" style="display: none;" title="Трансляция">
               <svg id="streamIconPlay" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
             </button>
 
+            <!-- Кнопка паузы (только зрителям) -->
             <button class="btn-icon" id="btnRequestPause" onclick="sendPauseRequest()" title="Попросить о паузе" style="display: none;">
               <svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
             </button>
 
+            <!-- Кнопка участников -->
             <button class="btn btn-secondary" style="padding: 5px 8px;" onclick="openParticipantsModal()" title="Участники">
               👥 <span id="participantsCounterText" style="font-weight: 700; margin-left: 2px;">0</span>
             </button>
           </div>
         </div>
 
-        <div class="video-viewport" id="videoViewportContainer">
+        <div class="video-viewport">
           <div class="stream-loader-overlay" id="streamLoader" style="display: none;">
             <div class="stream-spinner"></div>
             <span>Ожидание трансляции...</span>
           </div>
-          
-          <video id="roomVideo" autoplay playsinline controls style="width:100%; height:100%; object-fit:contain; border-radius:18px;"></video>
+          <video id="roomVideo" autoplay playsinline controls></video>
         </div>
       </div>
 
+      <!-- Чат-панель -->
       <div class="chat-container liquid-card">
         <div class="chat-messages" id="chatMessages"></div>
 
+        <!-- Плашка ответа -->
         <div class="reply-preview-bar" id="replyPreview">
           <div class="reply-preview-icon">
             <svg viewBox="0 0 24 24"><polyline points="9 17 4 12 9 7"></polyline><path d="M20 18v-2a4 4 0 0 0-4-4H4"></path></svg>
@@ -1350,25 +1378,7 @@
 
 <!-- ================= МОДАЛЬНЫЕ ОКНА ================= -->
 
-<div class="modal-backdrop" id="vkVideoModal">
-  <div class="modal-card liquid-card">
-    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 6px;">
-      <h3 style="font-size:1.05rem;">Трансляция VK Video</h3>
-      <button class="btn-icon" onclick="closeModal('vkVideoModal')">✕</button>
-    </div>
-    <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
-      1. Вставьте ссылку на VK Video и нажмите <b>«Открыть видео»</b>.<br>
-      2. В открывшемся окне включите воспроизведение.<br>
-      3. Нажмите <b>«Захватить вкладку с видео»</b> и выберите эту вкладку — видео со звуком пойдет всем в плеер комнаты!
-    </div>
-    <input type="text" id="vkVideoInputUrl" placeholder="https://vkvideo.ru/video-203677279_456242617">
-    <div style="display: flex; gap: 6px; margin-top: 4px;">
-      <button class="btn btn-secondary" style="flex:1;" onclick="openVkExternalTab()">1. Открыть видео</button>
-      <button class="btn" style="flex:1;" onclick="startVkTabCapture()">2. Захватить вкладку</button>
-    </div>
-  </div>
-</div>
-
+<!-- Выбор при выходе создателя -->
 <div class="modal-backdrop" id="hostLeaveModal">
   <div class="modal-card liquid-card" style="text-align: center;">
     <h3 style="font-size:1.05rem;">Выход из комнаты</h3>
@@ -1381,16 +1391,20 @@
   </div>
 </div>
 
+<!-- Панель приглашения друзей -->
 <div class="modal-backdrop" id="inviteFriendsDrawer">
   <div class="modal-card liquid-card invite-panel-card">
     <div class="invite-header">
       <input type="text" id="inviteSearchInput" placeholder="Поиск друзей..." oninput="renderInviteFriendsList()" style="flex:1;">
       <button class="btn btn-secondary" style="padding:5px 8px;" onclick="toggleSelectAllFriends()">Все</button>
     </div>
+
     <div class="invite-body" id="inviteFriendsList"></div>
+
     <div style="padding: 6px 10px; display:none;" id="sendInviteActionBar">
       <button class="btn btn-success" style="width: 100%;" onclick="sendBatchRoomInvites()">Пригласить (<span id="inviteSelectedCount">0</span>)</button>
     </div>
+
     <div class="invite-bottom-nav">
       <button class="invite-nav-btn" onclick="closeModal('inviteFriendsDrawer')">
         <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -1412,6 +1426,7 @@
   </div>
 </div>
 
+<!-- Личные сообщения (ЛС) -->
 <div class="modal-backdrop" id="dmModal">
   <div class="modal-card liquid-card dm-card">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 6px;">
@@ -1424,7 +1439,9 @@
       </div>
       <button class="btn-icon" onclick="closeModal('dmModal')">✕</button>
     </div>
+
     <div class="dm-messages" id="dmMessages"></div>
+
     <div style="display: flex; gap: 6px;">
       <input type="text" id="dmInput" placeholder="Личное сообщение..." onkeydown="if(event.key==='Enter') sendDirectMessage()">
       <button class="btn" onclick="sendDirectMessage()">➤</button>
@@ -1432,11 +1449,13 @@
   </div>
 </div>
 
+<!-- Профиль пользователя (Поверх всех модалок: z-index 380) -->
 <div class="modal-backdrop" id="userProfileModal">
   <div class="modal-card liquid-card" style="text-align: center; align-items: center;">
     <div class="avatar-box" id="upAvatar" style="width: 58px; height: 58px; font-size: 1.4rem; margin-bottom: 4px;">U</div>
     <h3 id="upName" style="font-size:1.05rem;">Имя</h3>
     <div id="upUsername" style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 12px;">@username</div>
+
     <div style="display: flex; gap: 6px; width: 100%;">
       <button class="btn btn-secondary" style="flex:1;" onclick="openDmFromProfile()">💬 Написать</button>
       <button class="btn" style="flex:1;" id="btnUpFriendAction" onclick="toggleFriendFromProfile()">+ В друзья</button>
@@ -1445,6 +1464,7 @@
   </div>
 </div>
 
+<!-- Контекстное меню -->
 <div class="context-menu-backdrop" id="contextMenu" onclick="closeContextMenu()">
   <div class="context-menu-card" onclick="event.stopPropagation()">
     <div class="msg-quote-preview" style="margin-bottom:0;" id="ctxMsgPreview">Сообщение</div>
@@ -1453,8 +1473,10 @@
       <button class="btn btn-secondary" style="flex:1;" onclick="ctxReply()">💬 Ответить</button>
       <button class="btn btn-secondary" style="flex:1;" onclick="ctxCopy()">📋 Копировать</button>
     </div>
+    
     <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Поставить реакцию:</div>
     <input type="text" id="ctxEmojiSearch" placeholder="Поиск эмодзи..." oninput="filterEmojis(this.value, '#ctxEmojiGrid')" style="padding: 5px 8px; font-size: 14px !important;">
+    
     <div class="emoji-grid" id="ctxEmojiGrid" style="max-height: 100px; overflow-y: auto;">
       <span class="emoji-btn" onclick="ctxReact('❤️')" data-tags="люблю сердце love">❤️</span>
       <span class="emoji-btn" onclick="ctxReact('💀')" data-tags="скелет череп skull">💀</span>
@@ -1467,16 +1489,19 @@
       <span class="emoji-btn" onclick="ctxReact('😭')" data-tags="плач cry">😭</span>
       <span class="emoji-btn" onclick="ctxReact('🎉')" data-tags="праздник party">🎉</span>
     </div>
+
     <button class="btn btn-secondary" style="margin-top: 2px;" onclick="closeContextMenu()">Отмена</button>
   </div>
 </div>
 
+<!-- Мой Профиль -->
 <div class="modal-backdrop" id="profileStatsModal">
   <div class="modal-card liquid-card">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 6px;">
       <h3 style="font-size:1.05rem;">Профиль</h3>
       <button class="btn-icon" onclick="closeModal('profileStatsModal')">✕</button>
     </div>
+
     <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
       <div class="avatar-box" id="myProfileAvatarBig" style="width: 50px; height: 50px; font-size: 1.2rem;">U</div>
       <div style="display: flex; flex-direction: column;">
@@ -1484,6 +1509,7 @@
         <span style="font-size: 0.78rem; color: var(--text-muted);" id="myProfileUnameText">@username</span>
       </div>
     </div>
+
     <div style="background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
       <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem;">
         <span style="font-weight: 700; color: #cbd5e1;">Статистика активности</span>
@@ -1492,23 +1518,28 @@
           <span style="color: var(--success);" id="statsOnlineLabel">В сети</span>
         </div>
       </div>
+
       <canvas id="activityChartCanvas" width="340" height="70" style="width: 100%; height: 70px;"></canvas>
+
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.06); padding-top: 6px;">
         <div>Зарегистрирован: <b style="color:#fff;" id="statRegDate">20.08.2026</b></div>
         <div>Проведено времени: <b style="color:#fff;" id="statTotalHours">0 ч.</b></div>
         <div>Друзья: <b style="color:#fff;" id="statFriendsCount">0</b></div>
       </div>
     </div>
+
     <button class="btn btn-secondary" style="width: 100%; margin-top: 4px;" onclick="closeModal('profileStatsModal')">Закрыть</button>
   </div>
 </div>
 
+<!-- Настройки -->
 <div class="modal-backdrop" id="settingsModal">
   <div class="modal-card liquid-card">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 6px;">
       <h3 style="font-size:1.05rem;">Настройки</h3>
       <button class="btn-icon" onclick="closeModal('settingsModal')">✕</button>
     </div>
+
     <div style="display: flex; align-items: center; gap: 10px;">
       <div class="avatar-box" id="settingsAvatarPreview" style="width: 44px; height: 44px; font-size: 1.1rem;">U</div>
       <label class="btn btn-secondary" style="font-size: 0.75rem; cursor: pointer;">
@@ -1516,14 +1547,17 @@
         <input type="file" accept="image/*" style="display: none;" onchange="uploadAvatar(event)">
       </label>
     </div>
+
     <div>
       <label style="font-size: 0.76rem; color: var(--text-muted);">Имя</label>
       <input type="text" id="settingInputName">
     </div>
+
     <div>
       <label style="font-size: 0.76rem; color: var(--text-muted);">Юзернейм (@username)</label>
       <input type="text" id="settingInputUsername">
     </div>
+
     <div>
       <label style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Кто может приглашать в комнаты</label>
       <div class="access-selection-row">
@@ -1532,6 +1566,7 @@
         <div class="access-pill-btn opt-unlisted" id="privBtn_none" onclick="setInvitePrivacy('none')">Никто</div>
       </div>
     </div>
+
     <div>
       <label style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Быстрая реакция (двойной клик)</label>
       <div style="display: flex; align-items: center; gap: 8px;">
@@ -1539,6 +1574,7 @@
         <span style="font-size: 0.72rem; color: var(--text-muted);">Нажмите для выбора эмодзи</span>
       </div>
     </div>
+
     <div style="display: flex; justify-content: flex-end; gap: 6px; margin-top: 4px;">
       <button class="btn btn-secondary" onclick="closeModal('settingsModal')">Отмена</button>
       <button class="btn" onclick="saveSettings()">Сохранить</button>
@@ -1546,6 +1582,7 @@
   </div>
 </div>
 
+<!-- Модалка быстрой реакции -->
 <div class="modal-backdrop" id="quickReactionModal">
   <div class="modal-card liquid-card" style="max-width: 320px;">
     <h3 style="font-size: 1rem;">Выберите быструю реакцию</h3>
@@ -1567,6 +1604,7 @@
   </div>
 </div>
 
+<!-- Настройки комнаты -->
 <div class="modal-backdrop" id="roomSettingsModal">
   <div class="modal-card liquid-card">
     <h3 style="font-size:1.05rem;">⚙ Настройки комнаты</h3>
@@ -1593,6 +1631,7 @@
   </div>
 </div>
 
+<!-- Участники (3 аккуратные иконки) -->
 <div class="modal-backdrop" id="participantsModal">
   <div class="modal-card liquid-card">
     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1603,6 +1642,7 @@
   </div>
 </div>
 
+<!-- Уведомления -->
 <div class="modal-backdrop" id="notifModal">
   <div class="modal-card liquid-card">
     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1613,6 +1653,7 @@
   </div>
 </div>
 
+<!-- Добавить друга -->
 <div class="modal-backdrop" id="addFriendModal">
   <div class="modal-card liquid-card">
     <h3 style="font-size:1.05rem;">Добавить друга</h3>
@@ -1624,6 +1665,7 @@
   </div>
 </div>
 
+<!-- Создать комнату -->
 <div class="modal-backdrop" id="createRoomModal">
   <div class="modal-card liquid-card">
     <h3 style="font-size:1.05rem;">Создать комнату</h3>
@@ -1689,8 +1731,10 @@
   let currentRoomId = null;
   let currentRoomData = null;
 
+  let peerConnection = null;
   let hostPeerMap = new Map();
   let viewerPeer = null;
+
   let localStream = null;
   let localAudioStream = null;
   let audioPeerConnections = new Map();
@@ -1707,6 +1751,7 @@
   let activeMembers = new Map();
   let presenceInitialLoaded = false;
   let heartbeatInterval = null;
+
   let replyingTo = null;
   let selectedMsgForContext = null;
   let isSendingMessage = false;
@@ -1714,6 +1759,7 @@
   let inviteTab = 'friends';
   let selectedInviteFriends = new Set();
   let dmPartner = null;
+
   let currentSystemBatch = { elem: null, startTime: 0, events: [] };
   let selectedEditAccess = 'public';
   let selectedCreateAccess = 'public';
@@ -1783,6 +1829,7 @@
   }
   initAutoPresence();
 
+  // --- ДИНАМИЧЕСКИЙ AMBILIGHT ФОН ОТ ВИДЕО ---
   const ambCanvas = document.getElementById('ambientCanvas');
   const ambCtx = ambCanvas.getContext('2d');
 
@@ -1798,6 +1845,7 @@
   }
   requestAnimationFrame(renderAmbilight);
 
+  // --- НАСТРОЙКИ ---
   function openSettingsModal() {
     document.getElementById('settingInputName').value = user.name || '';
     document.getElementById('settingInputUsername').value = user.username || '';
@@ -1876,6 +1924,7 @@
     reader.readAsDataURL(file);
   }
 
+  // --- ПРОФИЛЬ ---
   function openProfileStatsModal() {
     document.getElementById('myProfileNameText').innerText = user.name;
     document.getElementById('myProfileUnameText').innerText = '@' + user.username;
@@ -1923,6 +1972,7 @@
     ctx.fill();
   }
 
+  // --- ДРУЗЬЯ ---
   function setupFriendsSync() {
     db.ref('users_status').on('value', (snap) => {
       cachedStatuses = snap.val() || {};
@@ -1949,7 +1999,7 @@
     const uniqueKeys = Array.from(new Set(Object.keys(friends || {})));
 
     if (!uniqueKeys.length) {
-      list.innerHTML = '<div class="empty-state-card" style="padding:14px 4px;"><span>У вас нету друзей!</span></div>';
+      list.innerHTML = '<div class="empty-state-card" style="padding:14px 4px;"><span>Список друзей пуст</span></div>';
       return;
     }
 
@@ -2073,6 +2123,7 @@
     });
   }
 
+  // --- ЛОББИ ---
   function showLobby() {
     if (currentRoomId) {
       handleLeaveRoomClick();
@@ -2270,6 +2321,7 @@
     showToast('Настройки сохранены!');
   }
 
+  // --- ВХОД В КОМНАТУ И ПЕРЕДАЧА ПРАВ ---
   function enterRoom(roomId, roomData) {
     currentRoomId = roomId;
     currentRoomData = roomData;
@@ -2288,6 +2340,7 @@
 
     updateRoomAccessBadgeUI(roomData.access || 'public');
 
+    // Если заходит истинный создатель: возвращаем хост и снимаем чужие стримы
     if (roomData.creatorId === user.id && roomData.hostId !== user.id) {
       db.ref(`rooms_meta/${roomId}`).update({
         hostId: user.id,
@@ -2370,19 +2423,17 @@
   function updateRoomAccessBadgeUI(acc) {
     const badge = document.getElementById('roomAccessBadge');
     badge.className = acc === 'public' ? 'status-badge-public' : (acc === 'unlisted' ? 'status-badge-unlisted' : 'status-badge-friends');
-    badge.innerText = acc === 'public' ? 'Публичный' : (acc === 'unlisted' ? 'По ссылке' : 'Только друзьям');
+    badge.innerText = acc === 'public' ? 'Публичный' : (acc === 'unlisted' ? 'По ссылке' : 'Только для друзей');
   }
 
   function setupHostMode() {
     document.getElementById('btnStreamToggle').style.display = 'inline-flex';
-    document.getElementById('btnChooseVk').style.display = 'inline-flex';
     document.getElementById('btnRequestPause').style.display = 'none';
     document.getElementById('streamLoader').style.display = 'none';
   }
 
   function setupViewerMode() {
     document.getElementById('btnStreamToggle').style.display = 'none';
-    document.getElementById('btnChooseVk').style.display = 'none';
     document.getElementById('btnRequestPause').style.display = 'inline-flex';
     
     const loader = document.getElementById('streamLoader');
@@ -2403,20 +2454,12 @@
     db.ref('rooms_meta/' + currentRoomId).on('value', (snap) => {
       const r = snap.val();
       if (!r) return;
-
-      const prevHost = currentRoomData ? currentRoomData.hostUsername : null;
       currentRoomData = r;
 
       updateRoomAccessBadgeUI(r.access || 'public');
 
       const isMeHost = r.hostId === user.id;
       const isMeCreator = r.creatorId === user.id;
-
-      if (prevHost && prevHost !== r.hostUsername) {
-        const newHostMember = Array.from(activeMembers.values()).find(m => m.username === r.hostUsername);
-        const av = newHostMember && newHostMember.avatar ? newHostMember.avatar : null;
-        showOwnerNotification(r.hostName || r.hostUsername, av);
-      }
 
       if (!isMeHost && isBroadcasting) {
         stopBroadcasting();
@@ -2442,39 +2485,6 @@
         }
       }
     });
-  }
-
-  function openVkVideoHelperModal() {
-    openModal('vkVideoModal');
-  }
-
-  function openVkExternalTab() {
-    let raw = document.getElementById('vkVideoInputUrl').value.trim();
-    if (!raw) return showToast('Вставьте ссылку на видео VK');
-    window.open(raw, '_blank');
-  }
-
-  function startVkTabCapture() {
-    closeModal('vkVideoModal');
-    toggleScreenBroadcast();
-  }
-
-  function showOwnerNotification(nickname, avatarUrl) {
-    const container = document.getElementById('toastContainer');
-    const toast = document.createElement('div');
-    toast.className = 'toast-card';
-    const fallbackAv = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(nickname);
-
-    toast.innerHTML = `
-      <div style="display:flex; align-items:center; gap:8px;">
-        <div class="avatar-box" style="width:28px; height:28px; font-size:0.75rem;">
-          <img src="${avatarUrl || fallbackAv}">
-        </div>
-        <span><b>${escapeHtml(nickname)}</b> стал новым владельцем комнаты</span>
-      </div>
-    `;
-    container.appendChild(toast);
-    setTimeout(() => toast.remove(), 4000);
   }
 
   function setupPresenceTracker() {
@@ -2618,6 +2628,7 @@
     batch.elem.innerHTML = parts.join(', ');
   }
 
+  // Передача прав при выходе и сброс ограничений новому хосту
   function evaluateCrownOwnership() {
     if (!currentRoomData || !currentRoomId) return;
 
@@ -2659,6 +2670,7 @@
     }
   }
 
+  // --- ГОЛОСОВОЙ ЧАТ (МИКРОФОН ДЛЯ ВСЕХ) ---
   async function toggleMicrophone() {
     if (isMicBlockedByHost) {
       return showToast('Создатель отключил вам микрофон');
@@ -2766,7 +2778,7 @@
     });
   }
 
-  // --- WEBRTC ТРАНСЛЯЦИЯ (1-TO-N) ---
+  // --- WEBRTC ТРАНСЛЯЦИЯ ВИДЕО (1-TO-N) ---
   async function toggleScreenBroadcast() {
     if (isBroadcasting) {
       stopBroadcasting();
@@ -2788,7 +2800,7 @@
           localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         } catch(finalErr) {
           isBroadcasting = false;
-          return showToast('Не удалось получить доступ к трансляции');
+          return showToast('Не удалось получить доступ к экрану');
         }
       }
     }
@@ -2804,9 +2816,7 @@
     showToast('Трансляция запущена!');
 
     await db.ref(`rooms_signal/${currentRoomId}`).remove();
-    await db.ref(`rooms_meta/${currentRoomId}`).update({
-      isStreaming: true
-    });
+    await db.ref(`rooms_meta/${currentRoomId}/isStreaming`).set(true);
 
     startThumbnailBroadcast();
 
@@ -2925,6 +2935,7 @@
     });
   }
 
+  // Обновление превью каждые 5 минут
   function startThumbnailBroadcast() {
     if (thumbInterval) clearInterval(thumbInterval);
     const canvas = document.createElement('canvas');
@@ -2952,10 +2963,8 @@
     isBroadcasting = false;
     if (thumbInterval) clearInterval(thumbInterval);
     if (currentRoomId) {
-      db.ref(`rooms_meta/${currentRoomId}`).update({
-        isStreaming: false,
-        thumb: null
-      });
+      db.ref(`rooms_meta/${currentRoomId}/isStreaming`).set(false);
+      db.ref(`rooms_meta/${currentRoomId}/thumb`).remove();
     }
     hostPeerMap.forEach(pc => {
       try { pc.close(); } catch(e) {}
@@ -2981,6 +2990,10 @@
       try { viewerPeer.close(); } catch(e) {}
       viewerPeer = null;
     }
+    if (peerConnection) {
+      try { peerConnection.close(); } catch(e) {}
+      peerConnection = null;
+    }
     const v = getVideoElement();
     if (v) v.srcObject = null;
   }
@@ -2996,12 +3009,14 @@
     showToast('Запрос о паузе отправлен создателю!');
   }
 
+  // --- УЧАСТНИКИ: СОЗДАТЕЛЬ ПЕРВЫЙ, 3 ИКОНКИ ---
   function openParticipantsModal() {
     const list = document.getElementById('participantsList');
     if (!list) return;
     list.innerHTML = '';
-    const isMeHost = currentRoomData && currentRoomData.hostId === user.id;
+    const isMeCreator = currentRoomData && currentRoomData.creatorId === user.id;
 
+    // Создатель ВСЕГДА первый в списке
     const membersArr = Array.from(activeMembers.entries()).map(([uid, u]) => ({ uid, ...u }));
     membersArr.sort((a, b) => {
       if (a.uid === currentRoomData.creatorId) return -1;
@@ -3022,17 +3037,19 @@
       let actionButtons = '<div class="user-actions-row">';
 
       if (!isMe) {
+        // 1. ИКОНКА МИКРОФОНА
         const isMutedAudio = localMutedAudioUsers.has(uid);
         actionButtons += `
           <button class="action-sub-btn ${isMutedAudio ? 'active-muted' : ''}" onclick="toggleAudioMute('${uid}', '${escapeHtml(u.name)}')" title="Отключить микрофон">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
               <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-              <line x1="2" y1="22" x2="22" y2="2" stroke="#f43f5e" stroke-width="2.5"/>
+              <line x1="2" y1="2" x2="22" y2="22" stroke="#f43f5e" stroke-width="2.5"/>
             </svg>
           </button>
         `;
 
+        // 2. ИКОНКА ЧАТА
         const isChatMuted = localHiddenChatUsers.has(uid);
         actionButtons += `
           <button class="action-sub-btn ${isChatMuted ? 'active-muted' : ''}" onclick="toggleChatMute('${uid}', '${escapeHtml(u.name)}')" title="Скрыть чат">
@@ -3043,6 +3060,7 @@
           </button>
         `;
 
+        // 3. ИКОНКА ДРУГА
         if (isFriend) {
           actionButtons += `
             <button class="action-sub-btn" onclick="removeFriend('${u.username}')" title="Удалить из друзей">
@@ -3064,7 +3082,7 @@
           `;
         }
 
-        if (isMeHost) {
+        if (isMeCreator) {
           actionButtons += `
             <button class="action-sub-btn" title="Передать корону" onclick="transferHostTo('${uid}', '${u.username}', '${u.name}')">👑</button>
             <button class="action-sub-btn active-muted" title="Исключить" onclick="kickUser('${uid}')">✕</button>
@@ -3093,8 +3111,8 @@
   }
 
   function toggleAudioMute(uid, name) {
-    const isMeHost = currentRoomData && currentRoomData.hostId === user.id;
-    if (isMeHost) {
+    const isMeCreator = currentRoomData && currentRoomData.creatorId === user.id;
+    if (isMeCreator) {
       db.ref(`rooms_meta/${currentRoomId}/muted_mics/${uid}`).once('value', (snap) => {
         const nextState = !(snap.val() === true);
         db.ref(`rooms_meta/${currentRoomId}/muted_mics/${uid}`).set(nextState);
@@ -3110,8 +3128,8 @@
   }
 
   function toggleChatMute(uid, name) {
-    const isMeHost = currentRoomData && currentRoomData.hostId === user.id;
-    if (isMeHost) {
+    const isMeCreator = currentRoomData && currentRoomData.creatorId === user.id;
+    if (isMeCreator) {
       db.ref(`rooms_meta/${currentRoomId}/muted_chats/${uid}`).once('value', (snap) => {
         const nextState = !(snap.val() === true);
         db.ref(`rooms_meta/${currentRoomId}/muted_chats/${uid}`).set(nextState);
@@ -3139,11 +3157,8 @@
       creatorName: name,
       hostId: uid,
       hostUsername: uname,
-      hostName: name,
-      isStreaming: false,
-      thumb: null
+      hostName: name
     };
-    db.ref(`rooms_signal/${currentRoomId}`).remove();
     db.ref(`rooms_meta/${currentRoomId}/muted_mics/${uid}`).remove();
     db.ref(`rooms_meta/${currentRoomId}/muted_chats/${uid}`).remove();
     db.ref('rooms_meta/' + currentRoomId).update(updates);
@@ -3151,6 +3166,7 @@
     closeModal('participantsModal');
   }
 
+  // --- ВЫХОД ИЗ КОМНАТЫ ---
   function handleLeaveRoomClick() {
     if (currentRoomData && currentRoomData.creatorId === user.id) {
       openModal('hostLeaveModal');
@@ -3207,6 +3223,7 @@
     document.getElementById('btnRoomSettings').style.display = 'none';
   }
 
+  // --- ЧАТ ---
   function setupChat() {
     const msgContainer = document.getElementById('chatMessages');
     msgContainer.innerHTML = '';
@@ -3554,6 +3571,7 @@
     });
   }
 
+  // --- ПРИГЛАШЕНИЕ ДРУЗЕЙ ---
   function openInviteFriendsModal() {
     selectedInviteFriends.clear();
     inviteTab = 'friends';
@@ -3675,6 +3693,7 @@
     closeModal('inviteFriendsDrawer');
   }
 
+  // --- ЛС ---
   function openDirectMessage(uname, name) {
     dmPartner = { username: uname, name: name };
     document.getElementById('dmPartnerName').innerText = name;
@@ -3728,6 +3747,7 @@
     inp.value = '';
   }
 
+  // --- ПРОСМОТР ПРОФИЛЯ ---
   let viewingUser = null;
   function openUserProfile(uid, name, username, avatar) {
     viewingUser = { uid, name, username: username.replace('@', ''), avatar };
