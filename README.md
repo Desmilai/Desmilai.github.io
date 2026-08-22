@@ -566,37 +566,7 @@
       max-height: 100%;
       object-fit: contain;
       border-radius: 18px;
-    }
-
-    /* Наша панель управления плеером комнаты */
-    .custom-player-controls {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      right: 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      padding: 6px 10px;
-      z-index: 15;
-    }
-    .custom-timeline {
-      flex: 1;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 4px;
-      position: relative;
-      cursor: pointer;
-    }
-    .custom-timeline-progress {
-      height: 100%;
-      width: 0%;
-      background: var(--primary);
-      border-radius: 4px;
+      border: none;
     }
 
     .stream-loader-overlay {
@@ -1264,9 +1234,9 @@
           </div>
 
           <div style="display: flex; gap: 6px; align-items: center; flex-shrink: 0;">
-            <!-- Кнопка выбора прямого видеофайла или потока -->
-            <button class="btn btn-secondary" id="btnChooseVk" onclick="openVkVideoModal()" style="display: none; padding: 4px 8px; font-size: 0.75rem;" title="Запустить видео по ссылке">
-              🎬 Видеопоток
+            <!-- Кнопка прямого захвата VK Video через вкладку -->
+            <button class="btn btn-secondary" id="btnChooseVk" onclick="openVkVideoHelperModal()" style="display: none; padding: 4px 8px; font-size: 0.75rem;" title="Запустить ВК Видео">
+              📼 ВК Видео (Трансляция)
             </button>
 
             <button class="btn-icon" id="btnStreamToggle" onclick="toggleScreenBroadcast()" style="display: none;" title="Трансляция экрана">
@@ -1290,20 +1260,6 @@
           </div>
           
           <video id="roomVideo" autoplay playsinline controls style="width:100%; height:100%; object-fit:contain; border-radius:18px;"></video>
-
-          <!-- Синхронный плеер ARM (доступен хосту) -->
-          <div class="custom-player-controls" id="hostPlayerControls" style="display: none;">
-            <button class="btn-icon" style="width:28px; height:28px; min-width:28px;" onclick="hostTogglePlayPause()">
-              <svg id="ctrlPlayIcon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            </button>
-            <div class="custom-timeline" id="customTimeline" onclick="hostTimelineClick(event)">
-              <div class="custom-timeline-progress" id="customProgress"></div>
-            </div>
-            <span id="playerTimerText" style="font-size:0.75rem; color:#cbd5e1; min-width:60px;">0:00 / 0:00</span>
-            <button class="btn-icon" style="width:28px; height:28px; min-width:28px;" onclick="toggleFullscreen()">
-              <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
-            </button>
-          </div>
         </div>
       </div>
 
@@ -1397,18 +1353,18 @@
 <div class="modal-backdrop" id="vkVideoModal">
   <div class="modal-card liquid-card">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 6px;">
-      <h3 style="font-size:1.05rem;">Запуск видеопотока</h3>
+      <h3 style="font-size:1.05rem;">Трансляция VK Video</h3>
       <button class="btn-icon" onclick="closeModal('vkVideoModal')">✕</button>
     </div>
-    <div style="font-size: 0.8rem; color: var(--text-muted);">Вставьте ссылку на медиапоток (.mp4, .m3u8, прямой CDN поток) или выберите пример:</div>
-    <input type="text" id="vkVideoInputUrl" placeholder="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4">
-    <div style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; margin-top: 4px;">
-      <button class="btn btn-secondary" style="font-size: 0.78rem; text-align: left;" onclick="document.getElementById('vkVideoInputUrl').value='https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'">🐰 Тестовое Full HD Видео</button>
-      <button class="btn btn-secondary" style="font-size: 0.78rem; text-align: left;" onclick="document.getElementById('vkVideoInputUrl').value='https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'">🐘 Анимационный фильм</button>
+    <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+      1. Вставьте ссылку на VK Video и нажмите <b>«Открыть видео»</b>.<br>
+      2. В открывшемся окне включите воспроизведение.<br>
+      3. Нажмите <b>«Захватить вкладку с видео»</b> и выберите эту вкладку — видео со звуком пойдет всем в плеер комнаты!
     </div>
-    <div style="display: flex; justify-content: flex-end; gap: 6px; margin-top: 6px;">
-      <button class="btn btn-secondary" onclick="closeModal('vkVideoModal')">Отмена</button>
-      <button class="btn" onclick="launchCustomVideoByHost()">Запустить в плеере комнаты</button>
+    <input type="text" id="vkVideoInputUrl" placeholder="https://vkvideo.ru/video-203677279_456242617">
+    <div style="display: flex; gap: 6px; margin-top: 4px;">
+      <button class="btn btn-secondary" style="flex:1;" onclick="openVkExternalTab()">1. Открыть видео</button>
+      <button class="btn" style="flex:1;" onclick="startVkTabCapture()">2. Захватить вкладку</button>
     </div>
   </div>
 </div>
@@ -2183,7 +2139,7 @@
       card.className = 'room-item-liquid';
 
       let previewHtml = '';
-      if ((r.isStreaming || r.customVideoUrl) && r.thumb) {
+      if (r.isStreaming && r.thumb) {
         previewHtml = `
           <div class="room-card-preview">
             <div class="live-badge"><div class="live-dot-pulse"></div> LIVE</div>
@@ -2270,9 +2226,6 @@
       hostName: user.name,
       isStreaming: false,
       thumb: null,
-      customVideoUrl: null,
-      videoPlaying: true,
-      videoCurrentTime: 0,
       mutePresenceNotifs: false,
       lastHeartbeat: Date.now()
     };
@@ -2341,8 +2294,7 @@
         hostUsername: user.username,
         hostName: user.name,
         isStreaming: false,
-        thumb: null,
-        customVideoUrl: null
+        thumb: null
       });
       db.ref(`rooms_signal/${roomId}`).remove();
       roomData.hostId = user.id;
@@ -2405,7 +2357,6 @@
     setupChat();
     setupRoomDataListener();
     setupAudioMeshSignaling();
-    setupVideoPlayerListeners();
 
     handleUserPresenceEvent('joined', { name: user.name, avatar: user.avatar }, user.id);
 
@@ -2441,8 +2392,8 @@
       loader.style.backgroundImage = 'none';
     }
 
-    if (currentRoomData && (currentRoomData.isStreaming || currentRoomData.customVideoUrl)) {
-      renderActiveMedia(currentRoomData);
+    if (currentRoomData && currentRoomData.isStreaming) {
+      listenForBroadcast();
     } else {
       loader.style.display = 'flex';
     }
@@ -2483,143 +2434,29 @@
       if (isMeHost) {
         setupHostMode();
       } else {
-        setupViewerMode();
-      }
-
-      renderActiveMedia(r);
-    });
-  }
-
-  // --- СИНХРОНИЗАЦИЯ НАШЕГО ПЛЕЕРА ---
-  function setupVideoPlayerListeners() {
-    const v = getVideoElement();
-    if (!v) return;
-
-    v.ontimeupdate = () => {
-      const isHost = currentRoomData && currentRoomData.hostId === user.id;
-      const progress = document.getElementById('customProgress');
-      const timerText = document.getElementById('playerTimerText');
-
-      if (v.duration) {
-        const percent = (v.currentTime / v.duration) * 100;
-        if (progress) progress.style.width = percent + '%';
-        if (timerText) {
-          timerText.innerText = `${formatTime(v.currentTime)} / ${formatTime(v.duration)}`;
+        if (r.isStreaming) {
+          listenForBroadcast();
+        } else {
+          loader.style.display = 'flex';
+          stopWebRTC();
         }
       }
-
-      // Если мы хост, периодически записываем таймкод в базу
-      if (isHost && currentRoomData && currentRoomData.customVideoUrl) {
-        if (Math.abs(v.currentTime - (currentRoomData.videoCurrentTime || 0)) > 2) {
-          db.ref(`rooms_meta/${currentRoomId}/videoCurrentTime`).set(v.currentTime);
-        }
-      }
-    };
-  }
-
-  function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-  }
-
-  function renderActiveMedia(r) {
-    const v = getVideoElement();
-    const loader = document.getElementById('streamLoader');
-    const controls = document.getElementById('hostPlayerControls');
-    const isHost = currentRoomData && currentRoomData.hostId === user.id;
-
-    if (r.customVideoUrl) {
-      loader.style.display = 'none';
-
-      // Настройка источника видео
-      if (v.src !== r.customVideoUrl) {
-        v.src = r.customVideoUrl;
-        v.load();
-      }
-
-      // Показ кастомных кнопок только создателю комнаты
-      controls.style.display = isHost ? 'flex' : 'none';
-
-      // Зрителям отключаем встроенные контролы
-      v.controls = false;
-
-      // Синхронизация времени
-      if (typeof r.videoCurrentTime === 'number' && Math.abs(v.currentTime - r.videoCurrentTime) > 2) {
-        v.currentTime = r.videoCurrentTime;
-      }
-
-      // Синхронизация воспроизведения / паузы
-      if (r.videoPlaying) {
-        v.play().catch(() => {});
-        document.getElementById('ctrlPlayIcon').innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
-      } else {
-        v.pause();
-        document.getElementById('ctrlPlayIcon').innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
-      }
-
-    } else if (r.isStreaming) {
-      controls.style.display = 'none';
-      v.controls = true;
-      listenForBroadcast();
-    } else {
-      loader.style.display = 'flex';
-      controls.style.display = 'none';
-      stopWebRTC();
-      v.src = "";
-    }
-  }
-
-  function hostTogglePlayPause() {
-    const v = getVideoElement();
-    const isPlaying = !v.paused;
-    db.ref(`rooms_meta/${currentRoomId}`).update({
-      videoPlaying: !isPlaying,
-      videoCurrentTime: v.currentTime
     });
   }
 
-  function hostTimelineClick(e) {
-    const timeline = document.getElementById('customTimeline');
-    const v = getVideoElement();
-    if (!timeline || !v || !v.duration) return;
-
-    const rect = timeline.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const newTime = (clickX / rect.width) * v.duration;
-
-    db.ref(`rooms_meta/${currentRoomId}`).update({
-      videoCurrentTime: newTime
-    });
-  }
-
-  function toggleFullscreen() {
-    const v = getVideoElement();
-    if (!v) return;
-    if (v.requestFullscreen) v.requestFullscreen();
-    else if (v.webkitRequestFullscreen) v.webkitRequestFullscreen();
-  }
-
-  function openVkVideoModal() {
+  function openVkVideoHelperModal() {
     openModal('vkVideoModal');
   }
 
-  function launchCustomVideoByHost() {
-    const url = document.getElementById('vkVideoInputUrl').value.trim();
-    if (!url) return showToast('Введите прямую ссылку на видео');
+  function openVkExternalTab() {
+    let raw = document.getElementById('vkVideoInputUrl').value.trim();
+    if (!raw) return showToast('Вставьте ссылку на видео VK');
+    window.open(raw, '_blank');
+  }
 
+  function startVkTabCapture() {
     closeModal('vkVideoModal');
-    stopWebRTC();
-
-    db.ref(`rooms_meta/${currentRoomId}`).update({
-      customVideoUrl: url,
-      isStreaming: false,
-      videoPlaying: true,
-      videoCurrentTime: 0,
-      thumb: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=500&auto=format&fit=crop&q=60'
-    });
-
-    showToast('Видеопоток запущен для всех участников!');
+    toggleScreenBroadcast();
   }
 
   function showOwnerNotification(nickname, avatarUrl) {
@@ -2929,6 +2766,7 @@
     });
   }
 
+  // --- WEBRTC ТРАНСЛЯЦИЯ (1-TO-N) ---
   async function toggleScreenBroadcast() {
     if (isBroadcasting) {
       stopBroadcasting();
@@ -2950,7 +2788,7 @@
           localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         } catch(finalErr) {
           isBroadcasting = false;
-          return showToast('Не удалось получить доступ к экрану');
+          return showToast('Не удалось получить доступ к трансляции');
         }
       }
     }
@@ -2967,8 +2805,7 @@
 
     await db.ref(`rooms_signal/${currentRoomId}`).remove();
     await db.ref(`rooms_meta/${currentRoomId}`).update({
-      isStreaming: true,
-      customVideoUrl: null
+      isStreaming: true
     });
 
     startThumbnailBroadcast();
@@ -3117,8 +2954,7 @@
     if (currentRoomId) {
       db.ref(`rooms_meta/${currentRoomId}`).update({
         isStreaming: false,
-        thumb: null,
-        customVideoUrl: null
+        thumb: null
       });
     }
     hostPeerMap.forEach(pc => {
@@ -3192,7 +3028,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
               <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-              <line x1="2" y1="22" x2="22" y2="22" stroke="#f43f5e" stroke-width="2.5"/>
+              <line x1="2" y1="22" x2="22" y2="2" stroke="#f43f5e" stroke-width="2.5"/>
             </svg>
           </button>
         `;
@@ -3305,8 +3141,7 @@
       hostUsername: uname,
       hostName: name,
       isStreaming: false,
-      thumb: null,
-      customVideoUrl: null
+      thumb: null
     };
     db.ref(`rooms_signal/${currentRoomId}`).remove();
     db.ref(`rooms_meta/${currentRoomId}/muted_mics/${uid}`).remove();
