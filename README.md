@@ -1110,10 +1110,6 @@
     .access-pill-btn.opt-unlisted { background: rgba(244, 63, 94, 0.15); color: #fb7185; border-color: rgba(244, 63, 94, 0.4); }
     .access-pill-btn.opt-friends { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-color: rgba(245, 158, 11, 0.4); }
 
-    .access-pill-btn.opt-public.active { box-shadow: 0 0 8px rgba(16,185,129,0.6); border-color: #10b981; }
-    .access-pill-btn.opt-unlisted.active { box-shadow: 0 0 8px rgba(244,63,94,0.6); border-color: #f43f5e; }
-    .access-pill-btn.opt-friends.active { box-shadow: 0 0 8px rgba(245,158,11,0.6); border-color: #f59e0b; }
-
     .user-actions-row {
       display: flex;
       align-items: center;
@@ -1261,7 +1257,7 @@
             <div class="stream-spinner"></div>
             <span>Ожидание трансляции...</span>
           </div>
-          <div id="mediaTarget" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+          <div id="mediaTarget" style="width:100%; height:100%; position:relative; display:flex; align-items:center; justify-content:center;">
             <video id="roomVideo" autoplay playsinline controls style="width:100%; height:100%; object-fit:contain; border-radius:18px;"></video>
           </div>
         </div>
@@ -2444,18 +2440,28 @@
   function renderActiveMedia(r) {
     const target = document.getElementById('mediaTarget');
     const loader = document.getElementById('streamLoader');
+    const isHost = currentRoomData && currentRoomData.hostId === user.id;
 
     if (r.vkVideoUrl) {
       loader.style.display = 'none';
+      const isViewer = !isHost;
+      
+      const iframeHtml = `
+        <iframe src="${r.vkVideoUrl}" 
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" 
+                style="width:100%; height:100%; border:none; border-radius:18px; ${isViewer ? 'pointer-events: none;' : ''}">
+        </iframe>
+      `;
+
       if (!target.innerHTML.includes('iframe') || !target.innerHTML.includes(r.vkVideoUrl)) {
-        target.innerHTML = `<iframe src="${r.vkVideoUrl}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" allowfullscreen></iframe>`;
+        target.innerHTML = iframeHtml;
       }
     } else if (r.isStreaming) {
       listenForBroadcast();
     } else {
       loader.style.display = 'flex';
       stopWebRTC();
-      target.innerHTML = `<video id="roomVideo" autoplay playsinline controls></video>`;
+      target.innerHTML = `<video id="roomVideo" autoplay playsinline controls style="width:100%; height:100%; object-fit:contain; border-radius:18px;"></video>`;
     }
   }
 
@@ -3048,7 +3054,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
               <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-              <line x1="2" y1="2" x2="22" y2="22" stroke="#f43f5e" stroke-width="2.5"/>
+              <line x1="2" y1="22" x2="22" y2="22" stroke="#f43f5e" stroke-width="2.5"/>
             </svg>
           </button>
         `;
