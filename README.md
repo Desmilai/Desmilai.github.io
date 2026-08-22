@@ -569,6 +569,25 @@
       border: none;
     }
 
+    /* Хост-панель управления VK Video */
+    .vk-sync-controls {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      z-index: 10;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(14px);
+      padding: 6px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+    }
+    .vk-sync-controls.active { display: flex; }
+
     .stream-loader-overlay {
       position: absolute;
       inset: 0;
@@ -1257,8 +1276,17 @@
             <div class="stream-spinner"></div>
             <span>Ожидание трансляции...</span>
           </div>
+          
           <div id="mediaTarget" style="width:100%; height:100%; position:relative; display:flex; align-items:center; justify-content:center;">
             <video id="roomVideo" autoplay playsinline controls style="width:100%; height:100%; object-fit:contain; border-radius:18px;"></video>
+          </div>
+
+          <!-- Панель управления синхронизацией для создателя комнаты -->
+          <div class="vk-sync-controls" id="vkSyncControls">
+            <button class="btn" style="padding: 4px 10px;" id="btnVkPlayPause" onclick="hostToggleVkPlayPause()">⏯ Пауза / Плей</button>
+            <button class="btn btn-secondary" style="padding: 4px 8px;" onclick="hostSeekVk(-10)">⏪ -10с</button>
+            <button class="btn btn-secondary" style="padding: 4px 8px;" onclick="hostSeekVk(10)">⏩ +10с</button>
+            <button class="btn btn-secondary" style="padding: 4px 8px;" onclick="toggleFullscreenContainer()">⛶ На весь экран</button>
           </div>
         </div>
       </div>
@@ -1714,6 +1742,10 @@
   let selectedEditAccess = 'public';
   let selectedCreateAccess = 'public';
 
+  // Состояние синхронизации VK Video
+  let isVkPlaying = true;
+  let lastSyncTime = 0;
+
   function getVideoElement() {
     return document.getElementById('roomVideo');
   }
@@ -1787,6 +1819,8 @@
     if (v && !v.paused && !v.ended && v.readyState >= 2) {
       ambCanvas.classList.add('active');
       ambCtx.drawImage(v, 0, 0, ambCanvas.width, ambCanvas.height);
+    } else if (currentRoomData && currentRoomData.vkVideoUrl) {
+      ambCanvas.classList.add('active');
     } else {
       ambCanvas.classList.remove('active');
     }
@@ -2223,6 +2257,8 @@
       isStreaming: false,
       thumb: null,
       vkVideoUrl: null,
+      vkIsPlaying: true,
+      vkCurrentTime: 0,
       mutePresenceNotifs: false,
       lastHeartbeat: Date.now()
     };
@@ -2376,12 +2412,16 @@
     document.getElementById('btnChooseVk').style.display = 'inline-flex';
     document.getElementById('btnRequestPause').style.display = 'none';
     document.getElementById('streamLoader').style.display = 'none';
+    if (currentRoomData && currentRoomData.vkVideoUrl) {
+      document.getElementById('vkSyncControls').classList.add('active');
+    }
   }
 
   function setupViewerMode() {
     document.getElementById('btnStreamToggle').style.display = 'none';
     document.getElementById('btnChooseVk').style.display = 'none';
     document.getElementById('btnRequestPause').style.display = 'inline-flex';
+    document.getElementById('vkSyncControls').classList.remove('active');
     
     const loader = document.getElementById('streamLoader');
     if (currentRoomData && currentRoomData.thumb) {
@@ -2432,11 +2472,19 @@
       if (isMeHost) {
         setupHostMode();
       } else {
-        renderActiveMedia(r);
+        setupViewerMode();
+      }
+
+      renderActiveMedia(r);
+
+      // Синхронизация команд плеера VK Video
+      if (r.vkVideoUrl) {
+        handleVkSyncCommands(r);
       }
     });
   }
 
+  // Рендер активного видео/фрейма
   function renderActiveMedia(r) {
     const target = document.getElementById('mediaTarget');
     const loader = document.getElementById('streamLoader');
@@ -2444,24 +2492,77 @@
 
     if (r.vkVideoUrl) {
       loader.style.display = 'none';
-      const isViewer = !isHost;
-      
+      if (isHost) {
+        document.getElementById('vkSyncControls').classList.add('active');
+      }
+
       const iframeHtml = `
-        <iframe src="${r.vkVideoUrl}" 
-                allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" 
-                style="width:100%; height:100%; border:none; border-radius:18px; ${isViewer ? 'pointer-events: none;' : ''}">
+        <iframe id="vkPlayerIframe"
+                src="${r.vkVideoUrl}" 
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+                style="width:100%; height:100%; border:none; border-radius:18px;">
         </iframe>
       `;
 
-      if (!target.innerHTML.includes('iframe') || !target.innerHTML.includes(r.vkVideoUrl)) {
+      if (!target.innerHTML.includes('vkPlayerIframe') || !target.innerHTML.includes(r.vkVideoUrl)) {
         target.innerHTML = iframeHtml;
       }
     } else if (r.isStreaming) {
+      document.getElementById('vkSyncControls').classList.remove('active');
       listenForBroadcast();
     } else {
       loader.style.display = 'flex';
       stopWebRTC();
+      document.getElementById('vkSyncControls').classList.remove('active');
       target.innerHTML = `<video id="roomVideo" autoplay playsinline controls style="width:100%; height:100%; object-fit:contain; border-radius:18px;"></video>`;
+    }
+  }
+
+  // Синхронизация VK Video через postMessage
+  function sendVkIframeCommand(cmd, value) {
+    const iframe = document.getElementById('vkPlayerIframe');
+    if (!iframe || !iframe.contentWindow) return;
+    try {
+      iframe.contentWindow.postMessage(JSON.stringify({ method: cmd, value: value }), '*');
+    } catch(e) {}
+  }
+
+  function handleVkSyncCommands(room) {
+    if (room.vkIsPlaying === false) {
+      sendVkIframeCommand('pause');
+    } else {
+      sendVkIframeCommand('play');
+    }
+
+    if (room.vkCurrentTime && Math.abs(room.vkCurrentTime - lastSyncTime) > 3) {
+      lastSyncTime = room.vkCurrentTime;
+      sendVkIframeCommand('seek', room.vkCurrentTime);
+    }
+  }
+
+  function hostToggleVkPlayPause() {
+    isVkPlaying = !isVkPlaying;
+    db.ref(`rooms_meta/${currentRoomId}`).update({
+      vkIsPlaying: isVkPlaying
+    });
+    showToast(isVkPlaying ? 'Воспроизведение запущено' : 'Видео на паузе');
+  }
+
+  function hostSeekVk(secondsDelta) {
+    lastSyncTime = Math.max(0, lastSyncTime + secondsDelta);
+    db.ref(`rooms_meta/${currentRoomId}`).update({
+      vkCurrentTime: lastSyncTime
+    });
+  }
+
+  function toggleFullscreenContainer() {
+    const container = document.getElementById('videoViewportContainer');
+    if (!container) return;
+    if (!document.fullscreenElement) {
+      if (container.requestFullscreen) container.requestFullscreen();
+      else if (container.webkitRequestFullscreen) container.webkitRequestFullscreen();
+    } else {
+      if (document.exitFullscreen) document.exitFullscreen();
     }
   }
 
@@ -2481,12 +2582,15 @@
     } else if (raw.includes('/video-') || raw.includes('/video')) {
       const match = raw.match(/video(-?\d+)_(\d+)/);
       if (match) {
-        embedUrl = `https://vkvideo.ru/video_ext.php?oid=${match[1]}&id=${match[2]}&autoplay=1`;
+        embedUrl = `https://vkvideo.ru/video_ext.php?oid=${match[1]}&id=${match[2]}&autoplay=1&js_api=1`;
       }
     }
 
+    if (!embedUrl.includes('js_api=1')) {
+      embedUrl += (embedUrl.includes('?') ? '&' : '?') + 'js_api=1';
+    }
     if (!embedUrl.includes('autoplay=1')) {
-      embedUrl += (embedUrl.includes('?') ? '&' : '?') + 'autoplay=1';
+      embedUrl += '&autoplay=1';
     }
 
     closeModal('vkVideoModal');
@@ -2495,6 +2599,8 @@
     db.ref(`rooms_meta/${currentRoomId}`).update({
       vkVideoUrl: embedUrl,
       isStreaming: false,
+      vkIsPlaying: true,
+      vkCurrentTime: 0,
       thumb: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=500&auto=format&fit=crop&q=60'
     });
 
