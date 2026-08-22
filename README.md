@@ -9,21 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    /* Сброс стилей Jekyll / GitHub Pages */
-    .markdown-body, .container-lg, .my-5, .px-3 {
-      padding: 0 !important;
-      margin: 0 !important;
-      max-width: 100vw !important;
-      width: 100vw !important;
-      background: transparent !important;
-      color: inherit !important;
-    }
-    .markdown-body > h1:first-child,
-    .markdown-body > p:first-of-type,
-    .anchorjs-link {
-      display: none !important;
-    }
-
     :root {
       --bg-base: #02050e;
       --glass-bg: rgba(15, 23, 42, 0.45);
@@ -43,17 +28,14 @@
       --text-muted: #94a3b8;
     }
 
-    /* Полный запрет выделения текста на всем сайте */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
       -webkit-user-select: none !important;
-      -moz-user-select: none !important;
-      -ms-user-select: none !important;
       user-select: none !important;
       -webkit-touch-callout: none !important;
     }
@@ -84,7 +66,7 @@
       position: relative;
     }
 
-    /* Фоновый размытый градиент в главном меню */
+    /* Фоновый градиент */
     .gradient-mesh-bg {
       position: fixed;
       inset: 0;
@@ -115,7 +97,7 @@
       100% { transform: translate(-35px, 55px) scale(0.92); }
     }
 
-    /* Динамический холст для комнаты (Ambilight цвета видео) */
+    /* Динамический амбилайт-фон */
     #ambientCanvas {
       position: fixed;
       top: -15%;
@@ -123,11 +105,11 @@
       width: 130vw;
       height: 130vh;
       z-index: -1;
-      filter: blur(95px) saturate(340%) brightness(0.9);
+      filter: blur(120px) saturate(260%) brightness(0.4);
       opacity: 0;
       pointer-events: none;
       transform: translate3d(0, 0, 0);
-      transition: opacity 0.5s ease-in-out;
+      transition: opacity 0.6s ease-in-out;
     }
     #ambientCanvas.active { opacity: 0.85; }
 
@@ -144,7 +126,6 @@
       min-height: 0;
     }
 
-    /* Единый стиль полупрозрачного стекла для ВСЕХ панелей, окон и карточек */
     .liquid-card {
       background: var(--glass-bg) !important;
       backdrop-filter: blur(28px) saturate(200%) !important;
@@ -584,12 +565,13 @@
       box-shadow: var(--glass-shadow);
       flex-shrink: 0;
     }
-    video {
+    video, iframe {
       width: 100%;
       height: 100%;
       max-height: 100%;
       object-fit: contain;
       border-radius: 18px;
+      border: none;
     }
 
     .stream-loader-overlay {
@@ -1002,7 +984,7 @@
       max-width: 300px;
     }
 
-    /* Иерархия Z-INDEX модалок */
+    /* Модалки */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -1141,7 +1123,6 @@
     .access-pill-btn.opt-unlisted.active { box-shadow: 0 0 8px rgba(244,63,94,0.6); border-color: #f43f5e; }
     .access-pill-btn.opt-friends.active { box-shadow: 0 0 8px rgba(245,158,11,0.6); border-color: #f59e0b; }
 
-    /* 3 ИКОНКИ УЧАСТНИКА */
     .user-actions-row {
       display: flex;
       align-items: center;
@@ -1171,6 +1152,20 @@
 </head>
 <body>
 
+<!-- Скрипт очистки стандартных оберток Jekyll / GitHub Pages -->
+<script>
+  (function() {
+    const cleanGitHubWrapper = () => {
+      document.querySelectorAll('.markdown-body, .container-lg, .my-5, .px-3').forEach(el => {
+        el.removeAttribute('class');
+        el.style.cssText = 'padding: 0 !important; margin: 0 !important; max-width: none !important; width: 100% !important; background: transparent !important; color: inherit !important;';
+      });
+    };
+    if (document.body) cleanGitHubWrapper();
+    window.addEventListener('DOMContentLoaded', cleanGitHubWrapper);
+  })();
+</script>
+
 <div class="gradient-mesh-bg"></div>
 <div class="liquid-blob blob-1"></div>
 <div class="liquid-blob blob-2"></div>
@@ -1179,13 +1174,10 @@
 
 <!-- Тосты -->
 <div class="toast-container" id="toastContainer"></div>
-
-<!-- Аудио-контейнер для голосовой связи -->
 <div id="remoteAudiosContainer" style="display:none;"></div>
 
 <div class="app-container">
   
-  <!-- Главная шапка -->
   <header class="liquid-card">
     <div class="header-left">
       <button class="btn-icon" onclick="openNotifications()" title="Уведомления">
@@ -1198,12 +1190,10 @@
         <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
       </button>
 
-      <!-- Шестеренка настроек -->
       <button class="btn-icon" onclick="openSettingsModal()" title="Настройки">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
       </button>
 
-      <!-- Настройки комнаты для создателя -->
       <button class="btn-icon" id="btnRoomSettings" onclick="openRoomSettings()" style="display: none;" title="Настройки комнаты">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
       </button>
@@ -1262,29 +1252,34 @@
           </div>
 
           <div style="display: flex; gap: 6px; align-items: center; flex-shrink: 0;">
-            <!-- Кнопка стрима -->
-            <button class="btn-icon" id="btnStreamToggle" onclick="toggleScreenBroadcast()" style="display: none;" title="Трансляция">
+            <!-- Кнопки выбора трансляции (Экран или ВК Видео) -->
+            <button class="btn btn-secondary" id="btnChooseVk" onclick="openVkVideoModal()" style="display: none; padding: 4px 8px; font-size: 0.75rem;" title="Выбрать ВК Видео">
+              📼 ВК Видео
+            </button>
+
+            <button class="btn-icon" id="btnStreamToggle" onclick="toggleScreenBroadcast()" style="display: none;" title="Трансляция экрана">
               <svg id="streamIconPlay" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
             </button>
 
-            <!-- Кнопка паузы (только зрителям) -->
             <button class="btn-icon" id="btnRequestPause" onclick="sendPauseRequest()" title="Попросить о паузе" style="display: none;">
               <svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
             </button>
 
-            <!-- Кнопка участников -->
             <button class="btn btn-secondary" style="padding: 5px 8px;" onclick="openParticipantsModal()" title="Участники">
               👥 <span id="participantsCounterText" style="font-weight: 700; margin-left: 2px;">0</span>
             </button>
           </div>
         </div>
 
-        <div class="video-viewport">
+        <div class="video-viewport" id="videoViewportContainer">
           <div class="stream-loader-overlay" id="streamLoader" style="display: none;">
             <div class="stream-spinner"></div>
             <span>Ожидание трансляции...</span>
           </div>
-          <video id="roomVideo" autoplay playsinline controls></video>
+          <!-- Сюда вставляется либо <video>, либо <iframe> для ВК Видео -->
+          <div id="mediaTarget" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+            <video id="roomVideo" autoplay playsinline controls style="width:100%; height:100%; object-fit:contain; border-radius:18px;"></video>
+          </div>
         </div>
       </div>
 
@@ -1292,7 +1287,6 @@
       <div class="chat-container liquid-card">
         <div class="chat-messages" id="chatMessages"></div>
 
-        <!-- Плашка ответа -->
         <div class="reply-preview-bar" id="replyPreview">
           <div class="reply-preview-icon">
             <svg viewBox="0 0 24 24"><polyline points="9 17 4 12 9 7"></polyline><path d="M20 18v-2a4 4 0 0 0-4-4H4"></path></svg>
@@ -1377,7 +1371,27 @@
 
 <!-- ================= МОДАЛЬНЫЕ ОКНА ================= -->
 
-<!-- Выбор при выходе создателя -->
+<!-- Модалка выбора ВК Видео -->
+<div class="modal-backdrop" id="vkVideoModal">
+  <div class="modal-card liquid-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 6px;">
+      <h3 style="font-size:1.05rem;">Выбрать ВК Видео</h3>
+      <button class="btn-icon" onclick="closeModal('vkVideoModal')">✕</button>
+    </div>
+    <div style="font-size: 0.8rem; color: var(--text-muted);">Вставьте ссылку на плеер/видео VK Видео (iframe embed link) или выберите из списка:</div>
+    <input type="text" id="vkVideoInputUrl" placeholder="https://vk.com/video_ext.php?oid=...&id=...">
+    <div style="display: flex; flex-direction: column; gap: 4px; max-height: 150px; overflow-y: auto; margin-top: 4px;">
+      <button class="btn btn-secondary" style="font-size: 0.75rem; text-align: left;" onclick="selectPresetVk('https://vk.com/video_ext.php?oid=-22822305_456241315')">🎬 Пример VK Видео 1</button>
+      <button class="btn btn-secondary" style="font-size: 0.75rem; text-align: left;" onclick="selectPresetVk('https://vk.com/video_ext.php?oid=-10053_456241000')">🎬 Пример VK Видео 2</button>
+    </div>
+    <div style="display: flex; justify-content: flex-end; gap: 6px; margin-top: 6px;">
+      <button class="btn btn-secondary" onclick="closeModal('vkVideoModal')">Отмена</button>
+      <button class="btn" onclick="launchVkVideoByHost()">Запустить для всех</button>
+    </div>
+  </div>
+</div>
+
+<!-- Модалка выхода создателя -->
 <div class="modal-backdrop" id="hostLeaveModal">
   <div class="modal-card liquid-card" style="text-align: center;">
     <h3 style="font-size:1.05rem;">Выход из комнаты</h3>
@@ -1397,13 +1411,10 @@
       <input type="text" id="inviteSearchInput" placeholder="Поиск друзей..." oninput="renderInviteFriendsList()" style="flex:1;">
       <button class="btn btn-secondary" style="padding:5px 8px;" onclick="toggleSelectAllFriends()">Все</button>
     </div>
-
     <div class="invite-body" id="inviteFriendsList"></div>
-
     <div style="padding: 6px 10px; display:none;" id="sendInviteActionBar">
       <button class="btn btn-success" style="width: 100%;" onclick="sendBatchRoomInvites()">Пригласить (<span id="inviteSelectedCount">0</span>)</button>
     </div>
-
     <div class="invite-bottom-nav">
       <button class="invite-nav-btn" onclick="closeModal('inviteFriendsDrawer')">
         <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -1425,7 +1436,6 @@
   </div>
 </div>
 
-<!-- Личные сообщения (ЛС) -->
 <div class="modal-backdrop" id="dmModal">
   <div class="modal-card liquid-card dm-card">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 6px;">
@@ -1438,9 +1448,7 @@
       </div>
       <button class="btn-icon" onclick="closeModal('dmModal')">✕</button>
     </div>
-
     <div class="dm-messages" id="dmMessages"></div>
-
     <div style="display: flex; gap: 6px;">
       <input type="text" id="dmInput" placeholder="Личное сообщение..." onkeydown="if(event.key==='Enter') sendDirectMessage()">
       <button class="btn" onclick="sendDirectMessage()">➤</button>
@@ -1448,13 +1456,11 @@
   </div>
 </div>
 
-<!-- Профиль пользователя (Поверх всех модалок: z-index 380) -->
 <div class="modal-backdrop" id="userProfileModal">
   <div class="modal-card liquid-card" style="text-align: center; align-items: center;">
     <div class="avatar-box" id="upAvatar" style="width: 58px; height: 58px; font-size: 1.4rem; margin-bottom: 4px;">U</div>
     <h3 id="upName" style="font-size:1.05rem;">Имя</h3>
     <div id="upUsername" style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 12px;">@username</div>
-
     <div style="display: flex; gap: 6px; width: 100%;">
       <button class="btn btn-secondary" style="flex:1;" onclick="openDmFromProfile()">💬 Написать</button>
       <button class="btn" style="flex:1;" id="btnUpFriendAction" onclick="toggleFriendFromProfile()">+ В друзья</button>
@@ -1463,7 +1469,6 @@
   </div>
 </div>
 
-<!-- Контекстное меню -->
 <div class="context-menu-backdrop" id="contextMenu" onclick="closeContextMenu()">
   <div class="context-menu-card" onclick="event.stopPropagation()">
     <div class="msg-quote-preview" style="margin-bottom:0;" id="ctxMsgPreview">Сообщение</div>
@@ -1472,10 +1477,8 @@
       <button class="btn btn-secondary" style="flex:1;" onclick="ctxReply()">💬 Ответить</button>
       <button class="btn btn-secondary" style="flex:1;" onclick="ctxCopy()">📋 Копировать</button>
     </div>
-    
     <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Поставить реакцию:</div>
     <input type="text" id="ctxEmojiSearch" placeholder="Поиск эмодзи..." oninput="filterEmojis(this.value, '#ctxEmojiGrid')" style="padding: 5px 8px; font-size: 14px !important;">
-    
     <div class="emoji-grid" id="ctxEmojiGrid" style="max-height: 100px; overflow-y: auto;">
       <span class="emoji-btn" onclick="ctxReact('❤️')" data-tags="люблю сердце love">❤️</span>
       <span class="emoji-btn" onclick="ctxReact('💀')" data-tags="скелет череп skull">💀</span>
@@ -1488,19 +1491,16 @@
       <span class="emoji-btn" onclick="ctxReact('😭')" data-tags="плач cry">😭</span>
       <span class="emoji-btn" onclick="ctxReact('🎉')" data-tags="праздник party">🎉</span>
     </div>
-
     <button class="btn btn-secondary" style="margin-top: 2px;" onclick="closeContextMenu()">Отмена</button>
   </div>
 </div>
 
-<!-- Мой Профиль -->
 <div class="modal-backdrop" id="profileStatsModal">
   <div class="modal-card liquid-card">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 6px;">
       <h3 style="font-size:1.05rem;">Профиль</h3>
       <button class="btn-icon" onclick="closeModal('profileStatsModal')">✕</button>
     </div>
-
     <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
       <div class="avatar-box" id="myProfileAvatarBig" style="width: 50px; height: 50px; font-size: 1.2rem;">U</div>
       <div style="display: flex; flex-direction: column;">
@@ -1508,7 +1508,6 @@
         <span style="font-size: 0.78rem; color: var(--text-muted);" id="myProfileUnameText">@username</span>
       </div>
     </div>
-
     <div style="background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
       <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem;">
         <span style="font-weight: 700; color: #cbd5e1;">Статистика активности</span>
@@ -1517,28 +1516,23 @@
           <span style="color: var(--success);" id="statsOnlineLabel">В сети</span>
         </div>
       </div>
-
       <canvas id="activityChartCanvas" width="340" height="70" style="width: 100%; height: 70px;"></canvas>
-
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.06); padding-top: 6px;">
         <div>Зарегистрирован: <b style="color:#fff;" id="statRegDate">20.08.2026</b></div>
         <div>Проведено времени: <b style="color:#fff;" id="statTotalHours">0 ч.</b></div>
         <div>Друзья: <b style="color:#fff;" id="statFriendsCount">0</b></div>
       </div>
     </div>
-
     <button class="btn btn-secondary" style="width: 100%; margin-top: 4px;" onclick="closeModal('profileStatsModal')">Закрыть</button>
   </div>
 </div>
 
-<!-- Настройки -->
 <div class="modal-backdrop" id="settingsModal">
   <div class="modal-card liquid-card">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 6px;">
       <h3 style="font-size:1.05rem;">Настройки</h3>
       <button class="btn-icon" onclick="closeModal('settingsModal')">✕</button>
     </div>
-
     <div style="display: flex; align-items: center; gap: 10px;">
       <div class="avatar-box" id="settingsAvatarPreview" style="width: 44px; height: 44px; font-size: 1.1rem;">U</div>
       <label class="btn btn-secondary" style="font-size: 0.75rem; cursor: pointer;">
@@ -1546,17 +1540,14 @@
         <input type="file" accept="image/*" style="display: none;" onchange="uploadAvatar(event)">
       </label>
     </div>
-
     <div>
       <label style="font-size: 0.76rem; color: var(--text-muted);">Имя</label>
       <input type="text" id="settingInputName">
     </div>
-
     <div>
       <label style="font-size: 0.76rem; color: var(--text-muted);">Юзернейм (@username)</label>
       <input type="text" id="settingInputUsername">
     </div>
-
     <div>
       <label style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Кто может приглашать в комнаты</label>
       <div class="access-selection-row">
@@ -1565,7 +1556,6 @@
         <div class="access-pill-btn opt-unlisted" id="privBtn_none" onclick="setInvitePrivacy('none')">Никто</div>
       </div>
     </div>
-
     <div>
       <label style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Быстрая реакция (двойной клик)</label>
       <div style="display: flex; align-items: center; gap: 8px;">
@@ -1573,7 +1563,6 @@
         <span style="font-size: 0.72rem; color: var(--text-muted);">Нажмите для выбора эмодзи</span>
       </div>
     </div>
-
     <div style="display: flex; justify-content: flex-end; gap: 6px; margin-top: 4px;">
       <button class="btn btn-secondary" onclick="closeModal('settingsModal')">Отмена</button>
       <button class="btn" onclick="saveSettings()">Сохранить</button>
@@ -1581,7 +1570,6 @@
   </div>
 </div>
 
-<!-- Модалка быстрой реакции -->
 <div class="modal-backdrop" id="quickReactionModal">
   <div class="modal-card liquid-card" style="max-width: 320px;">
     <h3 style="font-size: 1rem;">Выберите быструю реакцию</h3>
@@ -1603,7 +1591,6 @@
   </div>
 </div>
 
-<!-- Настройки комнаты -->
 <div class="modal-backdrop" id="roomSettingsModal">
   <div class="modal-card liquid-card">
     <h3 style="font-size:1.05rem;">⚙ Настройки комнаты</h3>
@@ -1630,7 +1617,6 @@
   </div>
 </div>
 
-<!-- Участники -->
 <div class="modal-backdrop" id="participantsModal">
   <div class="modal-card liquid-card">
     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1641,7 +1627,6 @@
   </div>
 </div>
 
-<!-- Уведомления -->
 <div class="modal-backdrop" id="notifModal">
   <div class="modal-card liquid-card">
     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1652,7 +1637,6 @@
   </div>
 </div>
 
-<!-- Добавить друга -->
 <div class="modal-backdrop" id="addFriendModal">
   <div class="modal-card liquid-card">
     <h3 style="font-size:1.05rem;">Добавить друга</h3>
@@ -1664,7 +1648,6 @@
   </div>
 </div>
 
-<!-- Создать комнату -->
 <div class="modal-backdrop" id="createRoomModal">
   <div class="modal-card liquid-card">
     <h3 style="font-size:1.05rem;">Создать комнату</h3>
@@ -1828,7 +1811,7 @@
   }
   initAutoPresence();
 
-  // --- ДИНАМИЧЕСКИЙ AMBILIGHT ФОН ОТ ВИДЕО И СОЗДАТЕЛЯ ---
+  // --- AMBILIGHT ПОДСВЕТКА ---
   const ambCanvas = document.getElementById('ambientCanvas');
   const ambCtx = ambCanvas.getContext('2d');
 
@@ -2276,6 +2259,8 @@
       hostName: user.name,
       isStreaming: false,
       thumb: null,
+      vkVideoUrl: null,
+      vkPaused: false,
       mutePresenceNotifs: false,
       lastHeartbeat: Date.now()
     };
@@ -2339,14 +2324,15 @@
 
     updateRoomAccessBadgeUI(roomData.access || 'public');
 
-    // Если истинный создатель зашел в комнату — мгновенно забираем хост и сбрасываем чужие стримы
+    // Если истинный создатель зашел в комнату — мгновенно забираем хост
     if (roomData.creatorId === user.id && roomData.hostId !== user.id) {
       db.ref(`rooms_meta/${roomId}`).update({
         hostId: user.id,
         hostUsername: user.username,
         hostName: user.name,
         isStreaming: false,
-        thumb: null
+        thumb: null,
+        vkVideoUrl: null
       });
       db.ref(`rooms_signal/${roomId}`).remove();
       roomData.hostId = user.id;
@@ -2427,12 +2413,14 @@
 
   function setupHostMode() {
     document.getElementById('btnStreamToggle').style.display = 'inline-flex';
+    document.getElementById('btnChooseVk').style.display = 'inline-flex';
     document.getElementById('btnRequestPause').style.display = 'none';
     document.getElementById('streamLoader').style.display = 'none';
   }
 
   function setupViewerMode() {
     document.getElementById('btnStreamToggle').style.display = 'none';
+    document.getElementById('btnChooseVk').style.display = 'none';
     document.getElementById('btnRequestPause').style.display = 'inline-flex';
     
     const loader = document.getElementById('streamLoader');
@@ -2442,8 +2430,8 @@
       loader.style.backgroundImage = 'none';
     }
 
-    if (currentRoomData && currentRoomData.isStreaming) {
-      listenForBroadcast();
+    if (currentRoomData && (currentRoomData.isStreaming || currentRoomData.vkVideoUrl)) {
+      renderActiveMedia(currentRoomData);
     } else {
       loader.style.display = 'flex';
     }
@@ -2462,14 +2450,12 @@
       const isMeHost = r.hostId === user.id;
       const isMeCreator = r.creatorId === user.id;
 
-      // Уведомление о смене владельца (Аватарка + ник стал новым владельцем)
       if (prevHost && prevHost !== r.hostUsername) {
         const newHostMember = Array.from(activeMembers.values()).find(m => m.username === r.hostUsername);
         const av = newHostMember && newHostMember.avatar ? newHostMember.avatar : null;
         showOwnerNotification(r.hostName || r.hostUsername, av);
       }
 
-      // Если мы перестали быть хостом, вырубаем наш стрим
       if (!isMeHost && isBroadcasting) {
         stopBroadcasting();
         showToast('Права хоста изменились.');
@@ -2486,14 +2472,54 @@
       if (isMeHost) {
         setupHostMode();
       } else {
-        if (r.isStreaming) {
-          listenForBroadcast();
-        } else {
-          loader.style.display = 'flex';
-          stopWebRTC();
-        }
+        renderActiveMedia(r);
       }
     });
+  }
+
+  // Рендер медиа в комнате (Экран или ВК Видео)
+  function renderActiveMedia(r) {
+    const target = document.getElementById('mediaTarget');
+    const loader = document.getElementById('streamLoader');
+
+    if (r.vkVideoUrl) {
+      loader.style.display = 'none';
+      // Если это iframe для ВК Видео
+      if (!target.innerHTML.includes('iframe') || !target.innerHTML.includes(r.vkVideoUrl)) {
+        target.innerHTML = `<iframe src="${r.vkVideoUrl}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" allowfullscreen></iframe>`;
+      }
+    } else if (r.isStreaming) {
+      listenForBroadcast();
+    } else {
+      loader.style.display = 'flex';
+      stopWebRTC();
+      target.innerHTML = `<video id="roomVideo" autoplay playsinline controls style="width:100%; height:100%; object-fit:contain; border-radius:18px;"></video>`;
+    }
+  }
+
+  // Функции для интеграции ВК Видео
+  function openVkVideoModal() {
+    openModal('vkVideoModal');
+  }
+
+  function selectPresetVk(url) {
+    document.getElementById('vkVideoInputUrl').value = url;
+  }
+
+  function launchVkVideoByHost() {
+    const url = document.getElementById('vkVideoInputUrl').value.trim();
+    if (!url) return showToast('Введите ссылку на ВК Видео');
+
+    closeModal('vkVideoModal');
+    stopWebRTC(); // останавливаем захват экрана если был
+
+    db.ref(`rooms_meta/${currentRoomId}`).update({
+      vkVideoUrl: url,
+      isStreaming: false,
+      thumb: null
+    });
+
+    showToast('ВК Видео запущено для всех!');
   }
 
   function showOwnerNotification(nickname, avatarUrl) {
@@ -2842,7 +2868,10 @@
     showToast('Трансляция запущена!');
 
     await db.ref(`rooms_signal/${currentRoomId}`).remove();
-    await db.ref(`rooms_meta/${currentRoomId}/isStreaming`).set(true);
+    await db.ref(`rooms_meta/${currentRoomId}`).update({
+      isStreaming: true,
+      vkVideoUrl: null
+    });
 
     startThumbnailBroadcast();
 
@@ -2988,8 +3017,11 @@
     isBroadcasting = false;
     if (thumbInterval) clearInterval(thumbInterval);
     if (currentRoomId) {
-      db.ref(`rooms_meta/${currentRoomId}/isStreaming`).set(false);
-      db.ref(`rooms_meta/${currentRoomId}/thumb`).remove();
+      db.ref(`rooms_meta/${currentRoomId}`).update({
+        isStreaming: false,
+        thumb: null,
+        vkVideoUrl: null
+      });
     }
     hostPeerMap.forEach(pc => {
       try { pc.close(); } catch(e) {}
@@ -3180,7 +3212,8 @@
       hostUsername: uname,
       hostName: name,
       isStreaming: false,
-      thumb: null
+      thumb: null,
+      vkVideoUrl: null
     };
     db.ref(`rooms_signal/${currentRoomId}`).remove();
     db.ref(`rooms_meta/${currentRoomId}/muted_mics/${uid}`).remove();
