@@ -66,7 +66,6 @@
       position: relative;
     }
 
-    /* Фоновый градиент */
     .gradient-mesh-bg {
       position: fixed;
       inset: 0;
@@ -97,7 +96,6 @@
       100% { transform: translate(-35px, 55px) scale(0.92); }
     }
 
-    /* Динамический амбилайт-фон */
     #ambientCanvas {
       position: fixed;
       top: -15%;
@@ -444,7 +442,6 @@
       border: 1px solid var(--glass-border);
     }
 
-    /* Аватарка */
     .friend-avatar-wrap, .avatar-box {
       position: relative;
       width: 36px;
@@ -496,7 +493,6 @@
     .status-dot-on-avatar.online { background: var(--success); box-shadow: 0 0 6px var(--success); }
     .status-dot-on-avatar.offline { background: var(--offline); }
 
-    /* Комната */
     .room-workspace {
       display: flex;
       flex-direction: column;
@@ -739,7 +735,6 @@
       text-overflow: ellipsis;
     }
 
-    /* Анимации реакций */
     .emoji-anim-heart { display: inline-block; animation: heartbeat 0.8s infinite ease-in-out; }
     .emoji-anim-fire { display: inline-block; animation: flamePulse 1s infinite alternate ease-in-out; }
     .emoji-anim-party { display: inline-block; animation: confettiBurst 0.6s ease-out; }
@@ -959,7 +954,6 @@
       gap: 6px;
     }
 
-    /* Тосты */
     .toast-container {
       position: fixed;
       top: 16px;
@@ -984,7 +978,6 @@
       max-width: 300px;
     }
 
-    /* Модалки */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -1152,7 +1145,6 @@
 </head>
 <body>
 
-<!-- Скрипт очистки стандартных оберток Jekyll / GitHub Pages -->
 <script>
   (function() {
     const cleanGitHubWrapper = () => {
@@ -1172,7 +1164,6 @@
 <div class="liquid-blob blob-3"></div>
 <canvas id="ambientCanvas" width="64" height="36"></canvas>
 
-<!-- Тосты -->
 <div class="toast-container" id="toastContainer"></div>
 <div id="remoteAudiosContainer" style="display:none;"></div>
 
@@ -1191,7 +1182,7 @@
       </button>
 
       <button class="btn-icon" onclick="openSettingsModal()" title="Настройки">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l-.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
       </button>
 
       <button class="btn-icon" id="btnRoomSettings" onclick="openRoomSettings()" style="display: none;" title="Настройки комнаты">
@@ -1252,15 +1243,17 @@
           </div>
 
           <div style="display: flex; gap: 6px; align-items: center; flex-shrink: 0;">
-            <!-- Кнопки выбора трансляции (Экран или ВК Видео) -->
+            <!-- Кнопка выбора ВК Видео (Только для хоста) -->
             <button class="btn btn-secondary" id="btnChooseVk" onclick="openVkVideoModal()" style="display: none; padding: 4px 8px; font-size: 0.75rem;" title="Выбрать ВК Видео">
               📼 ВК Видео
             </button>
 
+            <!-- Кнопка демонстрации экрана (Только для хоста) -->
             <button class="btn-icon" id="btnStreamToggle" onclick="toggleScreenBroadcast()" style="display: none;" title="Трансляция экрана">
               <svg id="streamIconPlay" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
             </button>
 
+            <!-- Кнопка паузы (только зрителям) -->
             <button class="btn-icon" id="btnRequestPause" onclick="sendPauseRequest()" title="Попросить о паузе" style="display: none;">
               <svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
             </button>
@@ -1271,14 +1264,14 @@
           </div>
         </div>
 
-        <div class="video-viewport" id="videoViewportContainer">
+        <div class="video-viewport">
           <div class="stream-loader-overlay" id="streamLoader" style="display: none;">
             <div class="stream-spinner"></div>
             <span>Ожидание трансляции...</span>
           </div>
-          <!-- Сюда вставляется либо <video>, либо <iframe> для ВК Видео -->
+          <!-- Динамический контейнер под видео или ВК iframe -->
           <div id="mediaTarget" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
-            <video id="roomVideo" autoplay playsinline controls style="width:100%; height:100%; object-fit:contain; border-radius:18px;"></video>
+            <video id="roomVideo" autoplay playsinline controls></video>
           </div>
         </div>
       </div>
@@ -1378,11 +1371,12 @@
       <h3 style="font-size:1.05rem;">Выбрать ВК Видео</h3>
       <button class="btn-icon" onclick="closeModal('vkVideoModal')">✕</button>
     </div>
-    <div style="font-size: 0.8rem; color: var(--text-muted);">Вставьте ссылку на плеер/видео VK Видео (iframe embed link) или выберите из списка:</div>
+    <div style="font-size: 0.8rem; color: var(--text-muted);">Выберите готовое видео или вставьте прямую ссылку на эмбед-плеер VK:</div>
     <input type="text" id="vkVideoInputUrl" placeholder="https://vk.com/video_ext.php?oid=...&id=...">
-    <div style="display: flex; flex-direction: column; gap: 4px; max-height: 150px; overflow-y: auto; margin-top: 4px;">
-      <button class="btn btn-secondary" style="font-size: 0.75rem; text-align: left;" onclick="selectPresetVk('https://vk.com/video_ext.php?oid=-22822305_456241315')">🎬 Пример VK Видео 1</button>
-      <button class="btn btn-secondary" style="font-size: 0.75rem; text-align: left;" onclick="selectPresetVk('https://vk.com/video_ext.php?oid=-10053_456241000')">🎬 Пример VK Видео 2</button>
+    <div style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; margin-top: 4px;">
+      <button class="btn btn-secondary" style="font-size: 0.78rem; text-align: left;" onclick="selectPresetVk('https://vk.com/video_ext.php?oid=-22822305_456241315')">🎬 Популярное видео VK 1</button>
+      <button class="btn btn-secondary" style="font-size: 0.78rem; text-align: left;" onclick="selectPresetVk('https://vk.com/video_ext.php?oid=-10053_456241000')">🎬 Популярное видео VK 2</button>
+      <button class="btn btn-secondary" style="font-size: 0.78rem; text-align: left;" onclick="selectPresetVk('https://vk.com/video_ext.php?oid=-123456_78901234')">🎬 Клип VK 3</button>
     </div>
     <div style="display: flex; justify-content: flex-end; gap: 6px; margin-top: 6px;">
       <button class="btn btn-secondary" onclick="closeModal('vkVideoModal')">Отмена</button>
@@ -1391,7 +1385,6 @@
   </div>
 </div>
 
-<!-- Модалка выхода создателя -->
 <div class="modal-backdrop" id="hostLeaveModal">
   <div class="modal-card liquid-card" style="text-align: center;">
     <h3 style="font-size:1.05rem;">Выход из комнаты</h3>
@@ -1404,7 +1397,6 @@
   </div>
 </div>
 
-<!-- Панель приглашения друзей -->
 <div class="modal-backdrop" id="inviteFriendsDrawer">
   <div class="modal-card liquid-card invite-panel-card">
     <div class="invite-header">
@@ -1713,10 +1705,8 @@
   let currentRoomId = null;
   let currentRoomData = null;
 
-  let peerConnection = null;
   let hostPeerMap = new Map();
   let viewerPeer = null;
-
   let localStream = null;
   let localAudioStream = null;
   let audioPeerConnections = new Map();
@@ -1733,7 +1723,6 @@
   let activeMembers = new Map();
   let presenceInitialLoaded = false;
   let heartbeatInterval = null;
-
   let replyingTo = null;
   let selectedMsgForContext = null;
   let isSendingMessage = false;
@@ -1741,7 +1730,6 @@
   let inviteTab = 'friends';
   let selectedInviteFriends = new Set();
   let dmPartner = null;
-
   let currentSystemBatch = { elem: null, startTime: 0, events: [] };
   let selectedEditAccess = 'public';
   let selectedCreateAccess = 'public';
@@ -1811,7 +1799,6 @@
   }
   initAutoPresence();
 
-  // --- AMBILIGHT ПОДСВЕТКА ---
   const ambCanvas = document.getElementById('ambientCanvas');
   const ambCtx = ambCanvas.getContext('2d');
 
@@ -1827,7 +1814,6 @@
   }
   requestAnimationFrame(renderAmbilight);
 
-  // --- НАСТРОЙКИ ---
   function openSettingsModal() {
     document.getElementById('settingInputName').value = user.name || '';
     document.getElementById('settingInputUsername').value = user.username || '';
@@ -1906,7 +1892,6 @@
     reader.readAsDataURL(file);
   }
 
-  // --- ПРОФИЛЬ ---
   function openProfileStatsModal() {
     document.getElementById('myProfileNameText').innerText = user.name;
     document.getElementById('myProfileUnameText').innerText = '@' + user.username;
@@ -1954,7 +1939,6 @@
     ctx.fill();
   }
 
-  // --- ДРУЗЬЯ ---
   function setupFriendsSync() {
     db.ref('users_status').on('value', (snap) => {
       cachedStatuses = snap.val() || {};
@@ -2105,7 +2089,6 @@
     });
   }
 
-  // --- ЛОББИ ---
   function showLobby() {
     if (currentRoomId) {
       handleLeaveRoomClick();
@@ -2172,7 +2155,7 @@
       card.className = 'room-item-liquid';
 
       let previewHtml = '';
-      if (r.isStreaming && r.thumb) {
+      if ((r.isStreaming || r.vkVideoUrl) && r.thumb) {
         previewHtml = `
           <div class="room-card-preview">
             <div class="live-badge"><div class="live-dot-pulse"></div> LIVE</div>
@@ -2260,7 +2243,6 @@
       isStreaming: false,
       thumb: null,
       vkVideoUrl: null,
-      vkPaused: false,
       mutePresenceNotifs: false,
       lastHeartbeat: Date.now()
     };
@@ -2305,7 +2287,6 @@
     showToast('Настройки сохранены!');
   }
 
-  // --- ВХОД В КОМНАТУ И УПРАВЛЕНИЕ ХОСТОМ ---
   function enterRoom(roomId, roomData) {
     currentRoomId = roomId;
     currentRoomData = roomData;
@@ -2324,7 +2305,6 @@
 
     updateRoomAccessBadgeUI(roomData.access || 'public');
 
-    // Если истинный создатель зашел в комнату — мгновенно забираем хост
     if (roomData.creatorId === user.id && roomData.hostId !== user.id) {
       db.ref(`rooms_meta/${roomId}`).update({
         hostId: user.id,
@@ -2477,14 +2457,12 @@
     });
   }
 
-  // Рендер медиа в комнате (Экран или ВК Видео)
   function renderActiveMedia(r) {
     const target = document.getElementById('mediaTarget');
     const loader = document.getElementById('streamLoader');
 
     if (r.vkVideoUrl) {
       loader.style.display = 'none';
-      // Если это iframe для ВК Видео
       if (!target.innerHTML.includes('iframe') || !target.innerHTML.includes(r.vkVideoUrl)) {
         target.innerHTML = `<iframe src="${r.vkVideoUrl}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" allowfullscreen></iframe>`;
       }
@@ -2493,11 +2471,10 @@
     } else {
       loader.style.display = 'flex';
       stopWebRTC();
-      target.innerHTML = `<video id="roomVideo" autoplay playsinline controls style="width:100%; height:100%; object-fit:contain; border-radius:18px;"></video>`;
+      target.innerHTML = `<video id="roomVideo" autoplay playsinline controls></video>`;
     }
   }
 
-  // Функции для интеграции ВК Видео
   function openVkVideoModal() {
     openModal('vkVideoModal');
   }
@@ -2507,37 +2484,24 @@
   }
 
   function launchVkVideoByHost() {
-    const url = document.getElementById('vkVideoInputUrl').value.trim();
+    let url = document.getElementById('vkVideoInputUrl').value.trim();
     if (!url) return showToast('Введите ссылку на ВК Видео');
 
+    // Если пользователь вставил обычную ссылку на vk.com/video... пробуем переделать в эмбед
+    if (url.includes('vk.com/video') && !url.includes('video_ext.php')) {
+      showToast('Используйте ссылку для встраивания (iframe src)');
+    }
+
     closeModal('vkVideoModal');
-    stopWebRTC(); // останавливаем захват экрана если был
+    stopWebRTC();
 
     db.ref(`rooms_meta/${currentRoomId}`).update({
       vkVideoUrl: url,
       isStreaming: false,
-      thumb: null
+      thumb: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=500&auto=format&fit=crop&q=60'
     });
 
     showToast('ВК Видео запущено для всех!');
-  }
-
-  function showOwnerNotification(nickname, avatarUrl) {
-    const container = document.getElementById('toastContainer');
-    const toast = document.createElement('div');
-    toast.className = 'toast-card';
-    const fallbackAv = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(nickname);
-
-    toast.innerHTML = `
-      <div style="display:flex; align-items:center; gap:8px;">
-        <div class="avatar-box" style="width:28px; height:28px; font-size:0.75rem;">
-          <img src="${avatarUrl || fallbackAv}">
-        </div>
-        <span><b>${escapeHtml(nickname)}</b> стал новым владельцем комнаты</span>
-      </div>
-    `;
-    container.appendChild(toast);
-    setTimeout(() => toast.remove(), 4000);
   }
 
   function setupPresenceTracker() {
@@ -2722,7 +2686,6 @@
     }
   }
 
-  // --- ГОЛОСОВОЙ ЧАТ (МИКРОФОН ДЛЯ ВСЕХ) ---
   async function toggleMicrophone() {
     if (isMicBlockedByHost) {
       return showToast('Создатель отключил вам микрофон');
@@ -2830,7 +2793,6 @@
     });
   }
 
-  // --- WEBRTC ТРАНСЛЯЦИЯ ВИДЕО (1-TO-N) ---
   async function toggleScreenBroadcast() {
     if (isBroadcasting) {
       stopBroadcasting();
@@ -3066,7 +3028,6 @@
     showToast('Запрос о паузе отправлен создателю!');
   }
 
-  // --- УЧАСТНИКИ ---
   function openParticipantsModal() {
     const list = document.getElementById('participantsList');
     if (!list) return;
@@ -3223,7 +3184,6 @@
     closeModal('participantsModal');
   }
 
-  // --- ВЫХОД ИЗ КОМНАТЫ ---
   function handleLeaveRoomClick() {
     if (currentRoomData && currentRoomData.creatorId === user.id) {
       openModal('hostLeaveModal');
@@ -3280,7 +3240,6 @@
     document.getElementById('btnRoomSettings').style.display = 'none';
   }
 
-  // --- ЧАТ ---
   function setupChat() {
     const msgContainer = document.getElementById('chatMessages');
     msgContainer.innerHTML = '';
@@ -3628,7 +3587,6 @@
     });
   }
 
-  // --- ПРИГЛАШЕНИЕ ДРУЗЕЙ ---
   function openInviteFriendsModal() {
     selectedInviteFriends.clear();
     inviteTab = 'friends';
@@ -3750,7 +3708,6 @@
     closeModal('inviteFriendsDrawer');
   }
 
-  // --- ЛС ---
   function openDirectMessage(uname, name) {
     dmPartner = { username: uname, name: name };
     document.getElementById('dmPartnerName').innerText = name;
@@ -3804,7 +3761,6 @@
     inp.value = '';
   }
 
-  // --- ПРОСМОТР ПРОФИЛЯ ---
   let viewingUser = null;
   function openUserProfile(uid, name, username, avatar) {
     viewingUser = { uid, name, username: username.replace('@', ''), avatar };
@@ -3837,20 +3793,6 @@
     } else {
       sendFriendRequest(viewingUser.username);
     }
-  }
-
-  function startWatchTimer() {
-    setInterval(() => {
-      user.totalSeconds = (user.totalSeconds || 0) + 10;
-      saveLocalUser();
-
-      if (currentRoomData && friends[currentRoomData.hostUsername]) {
-        const frUname = currentRoomData.hostUsername;
-        const newHours = (friends[frUname].hours || 0) + (10 / 3600);
-        db.ref(`users_friends/${user.username}/${frUname}/hours`).set(newHours);
-        db.ref(`users_friends/${frUname}/${user.username}/hours`).set(newHours);
-      }
-    }, 10000);
   }
 
   function openModal(id) {
