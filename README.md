@@ -248,7 +248,6 @@
     .view-section { display: none; flex-direction: column; gap: 6px; flex: 1; min-height: 0; }
     .view-section.active { display: flex; }
 
-    /* Лобби */
     .lobby-grid {
       display: grid;
       grid-template-columns: 1fr 290px;
@@ -596,7 +595,6 @@
     }
     @keyframes spinStream { to { transform: rotate(360deg); } }
 
-    /* Чат */
     .chat-container {
       flex: 1;
       width: 100%;
@@ -1182,7 +1180,7 @@
       </button>
 
       <button class="btn-icon" onclick="openSettingsModal()" title="Настройки">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l-.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
       </button>
 
       <button class="btn-icon" id="btnRoomSettings" onclick="openRoomSettings()" style="display: none;" title="Настройки комнаты">
@@ -1209,7 +1207,6 @@
     </div>
   </header>
 
-  <!-- 1. Лобби -->
   <div id="lobbyView" class="view-section active">
     <div class="lobby-grid">
       <div class="liquid-card lobby-panel">
@@ -1230,11 +1227,9 @@
     </div>
   </div>
 
-  <!-- 2. Комната -->
   <div id="roomView" class="view-section">
     <div class="room-workspace">
       
-      <!-- Медиа-панель -->
       <div class="room-left-pane">
         <div class="room-sub-bar liquid-card">
           <div style="display: flex; align-items: center; gap: 6px;">
@@ -1243,17 +1238,14 @@
           </div>
 
           <div style="display: flex; gap: 6px; align-items: center; flex-shrink: 0;">
-            <!-- Кнопка выбора ВК Видео (Только для хоста) -->
             <button class="btn btn-secondary" id="btnChooseVk" onclick="openVkVideoModal()" style="display: none; padding: 4px 8px; font-size: 0.75rem;" title="Выбрать ВК Видео">
               📼 ВК Видео
             </button>
 
-            <!-- Кнопка демонстрации экрана (Только для хоста) -->
             <button class="btn-icon" id="btnStreamToggle" onclick="toggleScreenBroadcast()" style="display: none;" title="Трансляция экрана">
               <svg id="streamIconPlay" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
             </button>
 
-            <!-- Кнопка паузы (только зрителям) -->
             <button class="btn-icon" id="btnRequestPause" onclick="sendPauseRequest()" title="Попросить о паузе" style="display: none;">
               <svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
             </button>
@@ -1264,19 +1256,17 @@
           </div>
         </div>
 
-        <div class="video-viewport">
+        <div class="video-viewport" id="videoViewportContainer">
           <div class="stream-loader-overlay" id="streamLoader" style="display: none;">
             <div class="stream-spinner"></div>
             <span>Ожидание трансляции...</span>
           </div>
-          <!-- Динамический контейнер под видео или ВК iframe -->
           <div id="mediaTarget" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
-            <video id="roomVideo" autoplay playsinline controls></video>
+            <video id="roomVideo" autoplay playsinline controls style="width:100%; height:100%; object-fit:contain; border-radius:18px;"></video>
           </div>
         </div>
       </div>
 
-      <!-- Чат-панель -->
       <div class="chat-container liquid-card">
         <div class="chat-messages" id="chatMessages"></div>
 
@@ -1364,20 +1354,14 @@
 
 <!-- ================= МОДАЛЬНЫЕ ОКНА ================= -->
 
-<!-- Модалка выбора ВК Видео -->
 <div class="modal-backdrop" id="vkVideoModal">
   <div class="modal-card liquid-card">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 6px;">
       <h3 style="font-size:1.05rem;">Выбрать ВК Видео</h3>
       <button class="btn-icon" onclick="closeModal('vkVideoModal')">✕</button>
     </div>
-    <div style="font-size: 0.8rem; color: var(--text-muted);">Выберите готовое видео или вставьте прямую ссылку на эмбед-плеер VK:</div>
-    <input type="text" id="vkVideoInputUrl" placeholder="https://vk.com/video_ext.php?oid=...&id=...">
-    <div style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; margin-top: 4px;">
-      <button class="btn btn-secondary" style="font-size: 0.78rem; text-align: left;" onclick="selectPresetVk('https://vk.com/video_ext.php?oid=-22822305_456241315')">🎬 Популярное видео VK 1</button>
-      <button class="btn btn-secondary" style="font-size: 0.78rem; text-align: left;" onclick="selectPresetVk('https://vk.com/video_ext.php?oid=-10053_456241000')">🎬 Популярное видео VK 2</button>
-      <button class="btn btn-secondary" style="font-size: 0.78rem; text-align: left;" onclick="selectPresetVk('https://vk.com/video_ext.php?oid=-123456_78901234')">🎬 Клип VK 3</button>
-    </div>
+    <div style="font-size: 0.8rem; color: var(--text-muted);">Вставьте любую ссылку на видео из VK или iframe-код:</div>
+    <input type="text" id="vkVideoInputUrl" placeholder="https://vkvideo.ru/video-203677279_456242617">
     <div style="display: flex; justify-content: flex-end; gap: 6px; margin-top: 6px;">
       <button class="btn btn-secondary" onclick="closeModal('vkVideoModal')">Отмена</button>
       <button class="btn" onclick="launchVkVideoByHost()">Запустить для всех</button>
@@ -2479,28 +2463,36 @@
     openModal('vkVideoModal');
   }
 
-  function selectPresetVk(url) {
-    document.getElementById('vkVideoInputUrl').value = url;
-  }
-
   function launchVkVideoByHost() {
-    let url = document.getElementById('vkVideoInputUrl').value.trim();
-    if (!url) return showToast('Введите ссылку на ВК Видео');
+    let raw = document.getElementById('vkVideoInputUrl').value.trim();
+    if (!raw) return showToast('Введите ссылку на ВК Видео');
 
-    // Если пользователь вставил обычную ссылку на vk.com/video... пробуем переделать в эмбед
-    if (url.includes('vk.com/video') && !url.includes('video_ext.php')) {
-      showToast('Используйте ссылку для встраивания (iframe src)');
+    let embedUrl = raw;
+
+    if (raw.includes('<iframe') && raw.includes('src="')) {
+      const match = raw.match(/src=["']([^"']+)["']/);
+      if (match && match[1]) embedUrl = match[1];
+    } else if (raw.includes('/video-') || raw.includes('/video')) {
+      const match = raw.match(/video(-?\d+)_(\d+)/);
+      if (match) {
+        embedUrl = `https://vkvideo.ru/video_ext.php?oid=${match[1]}&id=${match[2]}&autoplay=1`;
+      }
+    }
+
+    if (!embedUrl.includes('autoplay=1')) {
+      embedUrl += (embedUrl.includes('?') ? '&' : '?') + 'autoplay=1';
     }
 
     closeModal('vkVideoModal');
     stopWebRTC();
 
     db.ref(`rooms_meta/${currentRoomId}`).update({
-      vkVideoUrl: url,
+      vkVideoUrl: embedUrl,
       isStreaming: false,
       thumb: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=500&auto=format&fit=crop&q=60'
     });
 
+    renderActiveMedia({ vkVideoUrl: embedUrl });
     showToast('ВК Видео запущено для всех!');
   }
 
@@ -3008,10 +3000,6 @@
     if (viewerPeer) {
       try { viewerPeer.close(); } catch(e) {}
       viewerPeer = null;
-    }
-    if (peerConnection) {
-      try { peerConnection.close(); } catch(e) {}
-      peerConnection = null;
     }
     const v = getVideoElement();
     if (v) v.srcObject = null;
@@ -3793,6 +3781,20 @@
     } else {
       sendFriendRequest(viewingUser.username);
     }
+  }
+
+  function startWatchTimer() {
+    setInterval(() => {
+      user.totalSeconds = (user.totalSeconds || 0) + 10;
+      saveLocalUser();
+
+      if (currentRoomData && friends[currentRoomData.hostUsername]) {
+        const frUname = currentRoomData.hostUsername;
+        const newHours = (friends[frUname].hours || 0) + (10 / 3600);
+        db.ref(`users_friends/${user.username}/${frUname}/hours`).set(newHours);
+        db.ref(`users_friends/${frUname}/${user.username}/hours`).set(newHours);
+      }
+    }, 10000);
   }
 
   function openModal(id) {
